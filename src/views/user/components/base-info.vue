@@ -73,6 +73,17 @@
           </el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form-item label="个性签名：">
+        <el-input
+          v-model="userInfo.sign"
+          type="textarea"
+          :autosize="{minRows: 2, maxRows: 4}"
+          maxlength="100"
+          show-word-limit
+          readonly
+          class="w300"
+        />
+      </el-form-item>
       <el-form-item label="上次更新时间：">
         <el-input
           v-model="userInfo.updateTime"
@@ -95,15 +106,15 @@ export default class BaseInfo extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-  .base-info {
-    padding-top: 0;
-    h3 {
-      font-weight: normal;
-      line-height: 3.5;
-      border-bottom: 1px solid #efefef;
-      margin: 0;
-      margin-bottom: 20px;
-      padding-left: 20px;
-    }
+.base-info {
+  padding-top: 0;
+  h3 {
+    font-weight: normal;
+    line-height: 3.5;
+    border-bottom: 1px solid #efefef;
+    margin: 0;
+    margin-bottom: 20px;
+    padding-left: 20px;
   }
+}
 </style>

@@ -3,28 +3,41 @@ import { Message, MessageBox, Loading } from 'element-ui'
 
 import { UserModule } from '@/store/modules/user'
 
+const notLoadingWhiteList = ['/switch/guide']
+
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   timeout: 5000
   // withCredentials: true // send cookies when cross-domain requests
 })
 let loading: any = {}
+let timer: any = null
 
 // Request interceptors
 service.interceptors.request.use(
-  (config) => {
+  config => {
+    const { url } = config
     // Add X-Access-Token header to every request, you can add other custom headers here
     if (UserModule.token) {
       config.headers.Authorization = 'Bearer ' + UserModule.token
     }
-    loading = Loading.service({
-      text: '拼命加载中...',
-      spinner: 'el-icon-loading',
-      background: 'rgba(0, 0, 0, 0.8)'
-    })
+    const isLoading = notLoadingWhiteList.some(
+      whiteUrl => url && url.includes(whiteUrl)
+    )
+    if (!isLoading) {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        loading = Loading.service({
+          text: '拼命加载中...',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.8)'
+        })
+      }, 300)
+    }
     return config
   },
-  (error) => {
+  error => {
+    clearTimeout(timer)
     loading.close && loading.close()
     Promise.reject(error)
   }
@@ -32,7 +45,8 @@ service.interceptors.request.use(
 
 // Response interceptors
 service.interceptors.response.use(
-  (response) => {
+  response => {
+    clearTimeout(timer)
     loading.close && loading.close()
     const res = response.data
     if (res.code === 200) {
@@ -41,9 +55,13 @@ service.interceptors.response.use(
       return Promise.reject(res)
     }
   },
-  (error) => {
+  error => {
+    clearTimeout(timer)
     loading.close && loading.close()
-    if (error.response && (error.response.status === 402 || error.response.status === 401)) {
+    if (
+      error.response &&
+      (error.response.status === 402 || error.response.status === 401)
+    ) {
       MessageBox.confirm(
         '你已被登出，可以取消继续留在该页面，或者重新登录',
         '确定登出',

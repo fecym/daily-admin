@@ -71,6 +71,14 @@ export default {
     'consume-details': '消费详情',
     'consume-statistics': '消费统计'
   },
+  steps: {
+    Hamburger: '打开或者关闭侧边栏',
+    Breadcrumb: '指示当前页面位置',
+    Search: '页面搜索，快速导航',
+    Screenfull: '可设置为全屏',
+    Size: '切换系统大小',
+    Tags: '您访问过页面的历史记录'
+  },
   navbar: {
     logOut: '退出登录',
     dashboard: '首页',
@@ -179,6 +187,14 @@ export default {
     showTagsView: '显示 Tags-View',
     showSidebarLogo: '显示侧边栏 Logo',
     fixedHeader: '固定 Header',
-    sidebarTextTheme: '侧边栏文字主题色'
+    sidebarTextTheme: '侧边栏文字主题色',
+    guide: '登录后开启引导'
+  },
+  user: {
+    skills: '技能',
+    sign: '个性签名'
+  },
+  home: {
+    todoList: '待办事项'
   }
 }

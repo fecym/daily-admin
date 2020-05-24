@@ -68,7 +68,8 @@
       >
         <el-table-column
           type="index"
-          label="#"
+          :index="indexMethod"
+          label="序号"
           align="center"
           width="50"
         />
@@ -147,7 +148,7 @@
     <section class="pagination">
       <el-pagination
         :current-page="searchQuery.curPage"
-        :page-sizes="[10, 20, 30, 40]"
+        :page-sizes="PAGE_SIZES"
         :page-size="searchQuery.pageSize"
         :total="totalRow"
         layout="total, sizes, prev, pager, next, jumper"
@@ -173,6 +174,7 @@ import { getAccounts } from '@/api/users'
 import { parseTime } from '@/utils'
 import AccountDialog from './components/dialog-account.vue'
 import { UserModule } from '@/store/modules/user'
+import { PAGE_SIZES } from '@/utils/constant'
 interface ISearchQuery {
   curPage: number
   pageSize: number
@@ -188,6 +190,14 @@ export default class AccountMgt extends Vue {
     return UserModule.userInfo
   }
 
+  get PAGE_SIZES() {
+    return PAGE_SIZES
+  }
+
+  private indexMethod(idx: number) {
+    return idx + 1 + (this.searchQuery.curPage - 1) * this.searchQuery.pageSize
+  }
+
   private searchQuery: ISearchQuery = {
     curPage: 1,
     pageSize: 10,
@@ -196,7 +206,7 @@ export default class AccountMgt extends Vue {
     dataArr: [],
     startAt: '',
     endAt: ''
-  };
+  }
 
   private rowsInfo: IUserInfo = {
     id: '',
@@ -209,12 +219,13 @@ export default class AccountMgt extends Vue {
     phoneNum: '',
     headPic: '',
     updateTime: parseTime(new Date()) as string,
-    createTime: ''
+    createTime: '',
+    sign: ''
   }
 
-  private dialogVisible = false;
-  private totalRow = 0;
-  private list: IUserInfo[] = [];
+  private dialogVisible = false
+  private totalRow = 0
+  private list: IUserInfo[] = []
   private add() {
     this.rowsInfo = {
       username: '',
@@ -225,6 +236,7 @@ export default class AccountMgt extends Vue {
       sex: 0,
       phoneNum: '',
       headPic: '',
+      sign: '',
       updateTime: parseTime(new Date()) as string,
       createTime: parseTime(new Date()) as string
     }

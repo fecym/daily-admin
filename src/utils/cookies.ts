@@ -6,7 +6,7 @@ export const getSidebarStatus = () => Cookies.get(sidebarStatusKey)
 export const setSidebarStatus = (sidebarStatus: string) => Cookies.set(sidebarStatusKey, sidebarStatus)
 
 const languageKey = 'language'
-export const getLanguage = () => Cookies.get(languageKey)
+export const getLanguage = () => Cookies.get(languageKey) || 'zh'
 export const setLanguage = (language: string) => Cookies.set(languageKey, language)
 
 const sizeKey = 'size'

@@ -9,7 +9,7 @@ const componentsRouter: RouteConfig = {
   meta: {
     title: 'components',
     icon: 'component',
-    roles: [1, 2]
+    roles: [2]
   },
   children: [
     {

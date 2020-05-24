@@ -12,13 +12,14 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
+import settings from '@/settings'
 
 @Component({
   name: 'Mallki'
 })
 export default class extends Vue {
   @Prop({ default: '' }) private className!: string
-  @Prop({ default: 'vue-typescript-admin' }) private text!: string
+  @Prop({ default: settings.title }) private text!: string
 }
 </script>
 

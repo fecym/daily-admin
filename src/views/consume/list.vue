@@ -61,6 +61,7 @@
       >
         <el-table-column
           type="index"
+          :index="indexMethod"
           label="序号"
           align="center"
           width="50"
@@ -99,7 +100,7 @@
     <section class="pagination">
       <el-pagination
         :current-page="searchQuery.curPage"
-        :page-sizes="[10, 20, 30, 40]"
+        :page-sizes="PAGE_SIZES"
         :page-size="searchQuery.pageSize"
         :total="totalRow"
         layout="total, sizes, prev, pager, next, jumper"
@@ -146,20 +147,25 @@ import tableConfig from './components/table.config'
 import { parseTime } from '@/utils'
 import { ITableConfig, IQuery } from './components/types'
 import { numberToFixed2 } from './components/tableHelper'
+import { PAGE_SIZES } from '@/utils/constant'
 
 @Component({ components: { ListEcharts } })
 export default class ConsumeList extends Vue {
+  get PAGE_SIZES() {
+    return PAGE_SIZES
+  }
+
   private searchQuery: IQuery = {
     dateArr: null,
     startAt: null,
     endAt: null,
     curPage: 1,
-    pageSize: 10
-  };
+    pageSize: 30
+  }
 
   private tableConfigList: Array<ITableConfig> = tableConfig
 
-  public table: HTMLDivElement | any = null;
+  public table: HTMLDivElement | any = null
   private mounted() {
     const timeRange: any = this.$route.query.timeRange
     this.searchQuery.dateArr = timeRange && JSON.parse(timeRange)
@@ -168,10 +174,10 @@ export default class ConsumeList extends Vue {
   }
 
   // 统计相关
-  private totalRow = 1;
-  private list: IConsumeInfo[] = [];
-  private consumeInfo: IConsumeInfo | object = {};
-  private currentMonthInfo: IConsumeInfo | object = {};
+  private totalRow = 1
+  private list: IConsumeInfo[] = []
+  private consumeInfo: IConsumeInfo | object = {}
+  private currentMonthInfo: IConsumeInfo | object = {}
   private checkedRow(row: IConsumeInfo) {
     this.consumeInfo = row
     this.$nextTick(() => {
@@ -180,9 +186,17 @@ export default class ConsumeList extends Vue {
     })
   }
 
+  private indexMethod(idx: number) {
+    return idx + 1 + (this.searchQuery.curPage - 1) * this.searchQuery.pageSize
+  }
+
   private getList() {
-    this.searchQuery.startAt = this.searchQuery.dateArr ? this.searchQuery.dateArr[0] : null
-    this.searchQuery.endAt = this.searchQuery.dateArr ? this.searchQuery.dateArr[1] : null
+    this.searchQuery.startAt = this.searchQuery.dateArr
+      ? this.searchQuery.dateArr[0]
+      : null
+    this.searchQuery.endAt = this.searchQuery.dateArr
+      ? this.searchQuery.dateArr[1]
+      : null
     getConsumeList(this.searchQuery).then((res: any) => {
       this.list = res.list && res.list.map((item: any) => numberToFixed2(item))
       if (!this.list || !this.list.length) return
@@ -223,9 +237,9 @@ export default class ConsumeList extends Vue {
   }
 
   // dialog数据
-  private dialogFormVisible = false;
-  private dialogInfoList: string[] = [];
-  private dialogTitle = '';
+  private dialogFormVisible = false
+  private dialogInfoList: string[] = []
+  private dialogTitle = ''
   private showDialogInfo(info: string, title: string, price: number | string) {
     console.log(price, info, title)
     this.dialogInfoList = info ? JSON.parse(info) : []
@@ -237,15 +251,18 @@ export default class ConsumeList extends Vue {
 
   // 去详情页
   private showDetails(row: IConsumeInfo) {
+    console.log('ConsumeList -> showDetails -> row', row)
     localStorage.setItem('consume-details', JSON.stringify(row))
     this.$router.push({
       name: 'consume-details',
-      query: { consumeId: row.consumeId as string }
+      query: { id: row.id as string }
     })
   }
 
   // 新增数据
-  private add() { this.$router.push({ name: 'consume-details' }) }
+  private add() {
+    this.$router.push({ name: 'consume-details' })
+  }
 
   // 表格合计行
   private getSummaries(param: any) {

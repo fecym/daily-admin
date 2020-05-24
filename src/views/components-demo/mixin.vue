@@ -126,7 +126,7 @@
               height="100px"
               image="https://wpimg.wallstcn.com/577965b9-bb9e-4e02-9f0c-095b41417191"
             >
-              vue-typescript-admin
+              {{ userInfo.nickname }}
             </pan-thumb>
           </div>
         </el-card>
@@ -162,7 +162,7 @@
           <div class="component-item">
             <mallki
               class-name="mallki-text"
-              text="vue-typescript-admin"
+              :text="userInfo.nickname"
             />
           </div>
         </el-card>
@@ -203,6 +203,7 @@ import PanThumb from '@/components/PanThumb/index.vue'
 import MaterialInput from '@/components/MaterialInput/index.vue'
 import Mallki from '@/components/TextHoverEffect/Mallki.vue'
 import DropdownMenu from '@/components/DropdownMenu/index.vue'
+import { UserModule } from '@/store/modules/user'
 
 @Component({
   name: 'ComponentMixinDemo',
@@ -220,6 +221,10 @@ export default class extends Vue {
     } else {
       callback()
     }
+  }
+
+  get userInfo() {
+    return UserModule.userInfo
   }
 
   private demo = {

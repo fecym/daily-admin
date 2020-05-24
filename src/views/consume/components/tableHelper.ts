@@ -1,6 +1,6 @@
 export const numberToFixed2 = (data: IObject) => {
   Object.keys(data).forEach((key: string) => {
-    if (typeof data[key] === 'number' && key !== 'consumeId') {
+    if (typeof data[key] === 'number' && key !== 'id') {
       data[key] = data[key].toFixed(2)
     }
   })
@@ -9,7 +9,7 @@ export const numberToFixed2 = (data: IObject) => {
 
 export const numberToFixed2Number = (data: IObject) => {
   Object.keys(data).forEach((key: string) => {
-    if (typeof data[key] === 'number' && key !== 'consumeId') {
+    if (typeof data[key] === 'number' && key !== 'id') {
       data[key] = ~~(data[key] * 100) / 100
     }
   })

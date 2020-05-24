@@ -44,6 +44,18 @@
           class="drawer-switch"
         />
       </div>
+
+      <div class="drawer-item">
+        <span>{{ $t('settings.guide') }}</span>
+        <el-switch
+          v-model="isGuide"
+          class="drawer-switch"
+          :active-value="1"
+          :inactive-value="0"
+          :disabled="isRequest"
+          @change="onGuideChange"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -52,6 +64,8 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { SettingsModule } from '@/store/modules/settings'
 import ThemePicker from '@/components/ThemePicker/index.vue'
+import { switchGuide } from '@/api/users'
+import { UserModule } from '@/store/modules/user'
 
 @Component({
   name: 'Settings',
@@ -92,8 +106,41 @@ export default class extends Vue {
     SettingsModule.ChangeSetting({ key: 'sidebarTextTheme', value })
   }
 
+  get userInfo() {
+    console.log(UserModule.userInfo, 'UserModule.userInfo')
+
+    return UserModule.userInfo
+  }
+
   private themeChange(value: string) {
     SettingsModule.ChangeSetting({ key: 'theme', value })
+  }
+
+  private isGuide: number = this.userInfo.isGuide
+  private isRequest = false
+  private timer: any = null
+  private onGuideChange(val: number) {
+    clearTimeout(this.timer)
+    try {
+      this.timer = setTimeout(async() => {
+        const data = {
+          id: this.userInfo.id,
+          flag: val
+        }
+        this.isRequest = true
+        await switchGuide(data)
+        this.isRequest = false
+        const userInfo: IUserInfo = { ...this.userInfo, isGuide: val }
+        UserModule.SET_USERINFO(userInfo)
+      }, 500)
+    } catch (error) {
+      this.isRequest = false
+      console.log('extends -> onGuideChange -> error', error)
+    }
+  }
+
+  private beforeDestroy() {
+    clearTimeout(this.timer)
   }
 }
 </script>
@@ -107,19 +154,19 @@ export default class extends Vue {
 
   .drawer-title {
     margin-bottom: 12px;
-    color: rgba(0, 0, 0, .85);
+    color: rgba(0, 0, 0, 0.85);
     font-size: 14px;
     line-height: 22px;
   }
 
   .drawer-item {
-    color: rgba(0, 0, 0, .65);
+    color: rgba(0, 0, 0, 0.65);
     font-size: 14px;
     padding: 12px 0;
   }
 
   .drawer-switch {
-    float: right
+    float: right;
   }
 }
 </style>

@@ -5,7 +5,7 @@
       <input
         class="new-todo"
         autocomplete="off"
-        placeholder="Todo List"
+        :placeholder="$t('home.todoList')"
         @keyup.enter="addTodo"
       >
     </header>
@@ -71,14 +71,14 @@ const filters: { [ key: string ]: Function } = {
   completed: (todos: ITodo[]) => todos.filter(todo => todo.done)
 }
 const defalutList = [
-  { text: 'star this repository', done: false },
-  { text: 'fork this repository', done: false },
-  { text: 'follow author', done: false },
-  { text: 'vue-typescript-admin-template', done: true },
-  { text: 'vue', done: true },
-  { text: 'element-ui', done: true },
-  { text: 'axios', done: true },
-  { text: 'webpack', done: true }
+  { text: '起床', done: false },
+  { text: '早饭', done: false },
+  { text: '跑步', done: false },
+  { text: '上班', done: true },
+  { text: '摸鱼', done: true },
+  { text: '下班', done: true },
+  { text: '吃饭', done: true },
+  { text: '睡觉', done: true }
 ]
 
 @Component({

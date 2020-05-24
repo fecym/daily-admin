@@ -32,13 +32,16 @@ class User extends VuexModule implements IUserState {
   public roles: string[] = [];
   public email = '';
   public userInfo = {
+    id: '',
     username: '',
     realname: '',
     nickname: '',
     email: '',
     sex: 0,
     phoneNum: '',
-    headPic: ''
+    headPic: '',
+    isGuide: 0,
+    sign: ''
   };
 
   @Mutation
@@ -52,7 +55,7 @@ class User extends VuexModule implements IUserState {
   }
 
   @Mutation
-  private SET_AVATAR(avatar: string) {
+  public SET_AVATAR(avatar: string) {
     this.avatar = avatar
   }
 

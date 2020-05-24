@@ -167,25 +167,6 @@ export const asyncRoutes: RouteConfig[] = [
     ]
   },
   {
-    path: '/guide',
-    component: Layout,
-    meta: { roles: [1, 2] },
-    redirect: 'noRedirect',
-    children: [
-      {
-        path: 'index',
-        component: () =>
-          import(/* webpackChunkName: "guide" */ '@/views/guide/index.vue'),
-        name: 'Guide',
-        meta: {
-          title: 'guide',
-          icon: 'guide',
-          noCache: true
-        }
-      }
-    ]
-  },
-  {
     path: '/profile',
     component: Layout,
     redirect: '/profile/index',
@@ -199,8 +180,7 @@ export const asyncRoutes: RouteConfig[] = [
         meta: {
           title: 'profile',
           icon: 'user',
-          noCache: true,
-          roles: [1, 2]
+          noCache: true
         }
       }
     ]

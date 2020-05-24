@@ -46,7 +46,7 @@ interface IObject {
 }
 
 interface IUserInfo {
-  id?: string
+  id?: string | number
   username: string
   realname: string
   nickname: string
@@ -56,12 +56,15 @@ interface IUserInfo {
   sex: number
   phoneNum: number | string
   headPic: string
+  avatar?: string
   updateTime?: string
   createTime?: string
+  isGuide?: number
+  sign: string
 }
 
 interface IConsumeInfo {
-  consumeId?: string | number
+  id?: string | number
   username: string
   createTime: string
   updateTime: string

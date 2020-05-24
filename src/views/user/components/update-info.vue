@@ -89,6 +89,16 @@
           </el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form-item label="个性签名：">
+        <el-input
+          v-model="info.sign"
+          type="textarea"
+          :autosize="{minRows: 2, maxRows: 4}"
+          maxlength="100"
+          show-word-limit
+          class="w300"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -104,6 +114,8 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { UserModule } from '@/store/modules/user'
 import { updateInfo } from '@/api/users'
+import { isValidURL } from '@/utils/validate'
+import { DEFAULT_AVATAR } from '@/utils/constant'
 @Component
 export default class UInfo extends Vue {
   // ts，extends写法
@@ -118,7 +130,8 @@ export default class UInfo extends Vue {
         email: '',
         sex: 0,
         phoneNum: '',
-        headPic: ''
+        headPic: '',
+        sign: ''
       },
       rules: {
         username: [
@@ -161,7 +174,7 @@ export default class UInfo extends Vue {
     }
   }
 
-  private password = '';
+  private password = ''
 
   private created() {
     // @ts-ignore
@@ -179,6 +192,10 @@ export default class UInfo extends Vue {
               this.$message.success('修改成功')
               // 更新信息
               UserModule.SET_USERINFO(res)
+              const avatar = isValidURL(res.headPic)
+                ? res.headPic
+                : DEFAULT_AVATAR
+              UserModule.SET_AVATAR(avatar)
               sessionStorage.setItem('userInfo', JSON.stringify(res))
             }
           })

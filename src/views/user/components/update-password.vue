@@ -126,10 +126,6 @@ export default class UpdatePass extends Vue {
     }
   }
 
-  public created() {
-    console.log(UserModule, 'UserModule.userInfoUserModule.userInfoUserModule.userInfoUserModule.userInfo')
-  }
-
   private save(formName: string) {
     // @ts-ignore
     this.$refs[formName].validate(valid => {

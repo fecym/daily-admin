@@ -98,6 +98,16 @@
           </el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form-item label="个性签名：">
+        <el-input
+          v-model="info.sign"
+          type="textarea"
+          :autosize="{minRows: 2, maxRows: 4}"
+          maxlength="100"
+          show-word-limit
+          class="w300"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"

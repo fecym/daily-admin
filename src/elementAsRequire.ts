@@ -49,7 +49,8 @@ import {
   Row,
   Col,
   Switch,
-  ColorPicker
+  ColorPicker,
+  Progress
 } from 'element-ui'
 
 Vue.use(Button)
@@ -85,8 +86,9 @@ Vue.use(Button)
   .use(Col)
   .use(Switch)
   .use(ColorPicker)
-// 兼容通知方法
+  .use(Progress)
 
+// 兼容通知方法
 Vue.prototype.$loading = Loading.service
 Vue.prototype.$msgbox = MessageBox
 // Vue.prototype.$alert = MessageBox.alert;

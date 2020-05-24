@@ -72,21 +72,13 @@
       </el-button>
 
       <div style="position:relative">
-        <!-- <div class="tips">
-          <span>{{ $t('login.guest') }} : guest </span>
-          <span>{{ $t('login.password') }} : 000000 </span>
-        </div> -->
-        <!-- <div class="tips">
-          <span>{{ $t('login.username') }} : editor </span>
-          <span>{{ $t('login.password') }} : {{ $t('login.any') }} </span>
-        </div> -->
         <div class="tips">
-          <span>{{ $t('login.guest') }} :  </span>
-          <span> guest </span>
+          <span>{{ $t('login.guest') }} :</span>
+          <span>guest</span>
         </div>
         <div class="tips">
-          <span>{{ $t('login.guestpass') }} :  </span>
-          <span> 000000 </span>
+          <span>{{ $t('login.guestpass') }} :</span>
+          <span>000000</span>
         </div>
 
         <el-button
@@ -122,6 +114,10 @@ import { isValidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect/index.vue'
 import SocialSign from './components/SocialSignin.vue'
 
+import Driver from 'driver.js'
+import 'driver.js/dist/driver.min.css'
+import steps from '@/utils/steps'
+
 @Component({
   name: 'Login',
   components: {
@@ -130,6 +126,8 @@ import SocialSign from './components/SocialSignin.vue'
   }
 })
 export default class extends Vue {
+  private driver: Driver | null = null
+
   private validateUsername = (rule: any, value: string, callback: Function) => {
     if (!isValidUsername(value)) {
       callback(new Error('Please enter the correct user name'))
@@ -176,15 +174,16 @@ export default class extends Vue {
 
   mounted() {
     if (this.loginForm.username === '') {
-      (this.$refs.username as Input).focus()
+      ;(this.$refs.username as Input).focus()
     } else if (this.loginForm.password === '') {
-      (this.$refs.password as Input).focus()
+      ;(this.$refs.password as Input).focus()
     }
   }
 
   private checkCapslock(e: KeyboardEvent) {
     const { key } = e
-    this.capsTooltip = key !== null && key.length === 1 && (key >= 'A' && key <= 'Z')
+    this.capsTooltip =
+      key !== null && key.length === 1 && key >= 'A' && key <= 'Z'
   }
 
   private showPwd() {
@@ -194,12 +193,12 @@ export default class extends Vue {
       this.passwordType = 'password'
     }
     this.$nextTick(() => {
-      (this.$refs.password as Input).focus()
+      ;(this.$refs.password as Input).focus()
     })
   }
 
   private handleLogin() {
-    (this.$refs.loginForm as ElForm).validate(async(valid: boolean) => {
+    ;(this.$refs.loginForm as ElForm).validate(async(valid: boolean) => {
       if (valid) {
         this.loading = true
         UserModule.Login(this.loginForm)
@@ -212,7 +211,19 @@ export default class extends Vue {
               sessionStorage.setItem('roles', JSON.stringify(data.roles))
               sessionStorage.setItem('nickname', JSON.stringify(data.nickname))
               sessionStorage.setItem('userInfo', JSON.stringify(data))
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+              this.$router.push({
+                path: this.redirect || '/',
+                query: this.otherQuery
+              })
+              const timer = setTimeout(() => {
+                clearTimeout(timer)
+                // 触发引导
+                if (data.isGuide) {
+                  this.driver = new Driver()
+                  this.driver.defineSteps(steps)
+                  this.driver.start()
+                }
+              }, 1000)
             } else {
               this.$message.error(data.msg)
             }
@@ -240,12 +251,16 @@ export default class extends Vue {
 </script>
 
 <style lang="scss">
-@import "../../styles/_variables.scss";
+@import '../../styles/_variables.scss';
 // References: https://www.zhangxinxu.com/wordpress/2018/01/css-caret-color-first-line/
 @supports (-webkit-mask: none) and (not (cater-color: $loginCursorColor)) {
   .login-container .el-input {
-    input { color: $loginCursorColor; }
-    input::first-line { color: $lightGray; }
+    input {
+      color: $loginCursorColor;
+    }
+    input::first-line {
+      color: $lightGray;
+    }
   }
 }
 
@@ -282,7 +297,7 @@ export default class extends Vue {
 </style>
 
 <style lang="scss" scoped>
-@import "../../styles/_variables.scss";
+@import '../../styles/_variables.scss';
 
 .login-container {
   height: 100%;
@@ -303,7 +318,10 @@ export default class extends Vue {
     font-size: 14px;
     color: #fff;
     margin-bottom: 10px;
-
+    span:nth-child(1) {
+      width: 65px;
+      display: inline-block;
+    }
     span {
       &:first-of-type {
         margin-right: 16px;

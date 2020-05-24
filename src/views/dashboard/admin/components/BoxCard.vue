@@ -16,25 +16,25 @@
       />
       <mallki
         class="mallki-text"
-        text="vue-typescript-admin"
+        :text="nickname"
       />
       <div
         style="padding-top:35px;"
         class="progress-item"
       >
-        <span>Vue</span>
+        <span>a 技能</span>
         <el-progress :percentage="51" />
       </div>
       <div class="progress-item">
-        <span>Typescript</span>
+        <span>b 技能</span>
         <el-progress :percentage="45" />
       </div>
       <div class="progress-item">
-        <span>Css</span>
+        <span>c 技能</span>
         <el-progress :percentage="4" />
       </div>
       <div class="progress-item">
-        <span>ESLint</span>
+        <span>d 技能</span>
         <el-progress
           :percentage="100"
           status="success"
@@ -68,6 +68,10 @@ export default class extends Vue {
 
   get roles() {
     return UserModule.roles
+  }
+
+  get nickname() {
+    return UserModule.userInfo.nickname
   }
 }
 </script>

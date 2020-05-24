@@ -71,6 +71,14 @@ export default {
     'consume-details': 'Pay Details',
     'consume-statistics': 'Pay Statistics'
   },
+  steps: {
+    Hamburger: 'Open && Close sidebar',
+    Breadcrumb: 'Indicate the current page location',
+    Search: 'Page search, quick navigation',
+    Screenfull: 'Set the page into fullscreen',
+    Size: 'Switch the system size',
+    Tags: 'The history of the page you visited'
+  },
   navbar: {
     logOut: 'Log Out',
     dashboard: 'Dashboard',
@@ -190,6 +198,14 @@ export default {
     showTagsView: 'Open Tags-View',
     showSidebarLogo: 'Sidebar Logo',
     fixedHeader: 'Fixed Header',
-    sidebarTextTheme: 'Sidebar Text Theme'
+    sidebarTextTheme: 'Sidebar Text Theme',
+    guide: 'Show Guide After Login'
+  },
+  user: {
+    skills: 'Skills',
+    sign: 'Signature'
+  },
+  home: {
+    todoList: 'Todo List'
   }
 }

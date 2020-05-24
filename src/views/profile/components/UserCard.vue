@@ -4,27 +4,26 @@
       slot="header"
       class="clearfix"
     >
-      <span>About me</span>
+      <span>关于我</span>
     </div>
 
     <div class="user-profile">
       <div class="box-center">
         <pan-thumb
-          :image="user.avatar"
+          :image="avatar"
           :height="'100px'"
           :width="'100px'"
           :hoverable="false"
         >
-          <div>Hello</div>
-          {{ user.roles }}
+          {{ user.nickname }}
         </pan-thumb>
       </div>
       <div class="box-center">
         <div class="user-name text-center">
-          {{ user.name }}
+          {{ user.realname }}
         </div>
         <div class="user-role text-center text-muted">
-          {{ user.roles | uppercaseFirstChar }}
+          {{ user.email }}
         </div>
       </div>
     </div>
@@ -32,34 +31,34 @@
     <div class="user-bio">
       <div class="user-education user-bio-section">
         <div class="user-bio-section-header">
-          <svg-icon name="education" /><span>Education</span>
+          <svg-icon name="education" /><span>{{ $t('user.sign') }}</span>
         </div>
         <div class="user-bio-section-body">
           <div class="text-muted">
-            JS in Computer Science from the University of Technology
+            {{ user.sign }}
           </div>
         </div>
       </div>
 
       <div class="user-skills user-bio-section">
         <div class="user-bio-section-header">
-          <svg-icon name="skill" /><span>Skills</span>
+          <svg-icon name="skill" /><span>{{ $t('user.skills') }}</span>
         </div>
         <div class="user-bio-section-body">
           <div class="progress-item">
-            <span>Vue</span>
+            <span>a 技能</span>
             <el-progress :percentage="51" />
           </div>
           <div class="progress-item">
-            <span>Typescript</span>
+            <span>b 技能</span>
             <el-progress :percentage="45" />
           </div>
           <div class="progress-item">
-            <span>Css</span>
+            <span>c 技能</span>
             <el-progress :percentage="4" />
           </div>
           <div class="progress-item">
-            <span>ESLint</span>
+            <span>d 技能</span>
             <el-progress
               :percentage="100"
               status="success"
@@ -73,7 +72,6 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { IProfile } from '../index.vue'
 import PanThumb from '@/components/PanThumb/index.vue'
 
 @Component({
@@ -83,7 +81,8 @@ import PanThumb from '@/components/PanThumb/index.vue'
   }
 })
 export default class extends Vue {
-  @Prop({ required: true }) private user!: IProfile
+  @Prop({ required: true }) private user!: IUserInfo
+  @Prop({ required: true }) private avatar!: string
 }
 </script>
 

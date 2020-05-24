@@ -153,7 +153,7 @@ export default class ConsumeDetails extends Vue {
   }
 
   private getInfo() {
-    if (this.$route.query.consumeId) {
+    if (this.$route.query.id) {
       // @ts-ignore
       const info = JSON.parse(localStorage.getItem('consume-details'))
       info.vehicleIntro = JSON.parse(info.vehicleIntro)
@@ -229,7 +229,7 @@ export default class ConsumeDetails extends Vue {
   private save(formName: string) {
     (this.$refs[formName] as ElForm).validate((valid: boolean) => {
       if (valid) {
-        if (!this.$route.query.consumeId) {
+        if (!this.$route.query.id) {
           // 添加
           this.addInfo()
         } else {
