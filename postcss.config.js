@@ -2,7 +2,7 @@
 
 module.exports = {
   plugins: {
-    autoprefixer: {},
+    autoprefixer: {}
     // 'postcss-px-to-viewport': {
     //   viewportWidth: 375,
     //   unitPrecision: 3, // px to vw无法整除时，保留几位小数

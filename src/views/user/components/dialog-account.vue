@@ -12,6 +12,7 @@
       :model="info"
       label-width="90px"
       class="demo-ruleForm"
+      :rules="rules"
     >
       <el-form-item label="登录名称">
         <el-input
@@ -111,15 +112,15 @@
       <el-form-item>
         <el-button
           type="primary"
-          @click="save"
+          @click="save('ruleForm')"
         >
-          确认修改
+          保存
         </el-button>
         <el-button
           type="info"
           @click="close"
         >
-          取消修改
+          取消
         </el-button>
       </el-form-item>
     </el-form>
@@ -131,7 +132,46 @@ import { updateInfo, createAccounts } from '@/api/users'
 import { Base64 } from 'js-base64'
 @Component
 export default class AccountDialog extends Vue {
-  @Prop({ default: false }) private info!: IUserInfo;
+  @Prop({ default: false }) private info!: IUserInfo
+  private rules = {
+    username: [
+      { required: true, message: '请输入您的登录名', trigger: 'blur' },
+      {
+        min: 3,
+        max: 10,
+        message: '登录名长度在 3 到 10 个字符',
+        trigger: 'blur'
+      }
+    ],
+    realname: [
+      { required: true, message: '请输入您的真实姓名', trigger: 'blur' }
+    ],
+    nickname: [
+      { required: true, message: '请输入您的昵称', trigger: 'blur' },
+      {
+        min: 3,
+        max: 10,
+        message: '昵称要求长度在 3 到 10 个字符',
+        trigger: 'blur'
+      }
+    ],
+    phoneNum: [
+      { required: true, message: '请输入您的手机号', trigger: 'blur' },
+      {
+        pattern: /^1[3|4|5|6|7|8][0-9]\d{4,8}$/,
+        message: '请输入正确的手机号'
+      }
+    ],
+    email: [
+      { required: true, message: '请输入您的邮箱', trigger: 'blur' },
+      {
+        pattern: /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/,
+        message: '请输入正确的邮箱地址'
+      }
+    ],
+    sex: [{ required: true, message: '请选择您的性别', trigger: 'change' }]
+  }
+
   private modify() {
     const info = {
       ...this.info,
@@ -165,12 +205,17 @@ export default class AccountDialog extends Vue {
       })
   }
 
-  private save() {
-    if (this.info.id) {
-      this.modify()
-    } else {
-      this.addAccounts()
-    }
+  private save(formName: string) {
+    // @ts-ignore
+    this.$refs[formName].validate(valid => {
+      if (valid) {
+        if (this.info.id) {
+          this.modify()
+        } else {
+          this.addAccounts()
+        }
+      }
+    })
   }
 
   private close() {
