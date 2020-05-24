@@ -65,6 +65,7 @@ interface IUserInfo {
 
 interface IConsumeInfo {
   id?: string | number
+  userId: number | string
   username: string
   createTime: string
   updateTime: string

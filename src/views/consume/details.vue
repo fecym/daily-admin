@@ -111,6 +111,7 @@ export default class ConsumeDetails extends Vue {
   private detailsFormConfigList = detailsFormConfigList
   private info: IConsumeInfo = {
     username: UserModule.userInfo.username,
+    userId: UserModule.userInfo.id,
     createTime: '',
     updateTime: '',
     // 餐饮
