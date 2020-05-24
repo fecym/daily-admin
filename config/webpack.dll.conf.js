@@ -9,7 +9,7 @@ module.exports = {
     // vendor: ['element-ui', 'vue-class-component', 'vue', 'vue-router', 'vuex', 'axios']// 取出所有依赖单独打包
     elementUI: ['element-ui'],
     vue: ['vue-class-component', 'vue-property-decorator', 'vuex-module-decorators', 'vue', 'vue-router', 'vuex'],
-    vendor: ['axios']
+    vendor: ['axios', 'lodash', 'xlsx']
   },
   output: {
     path: dllPath, // 打包后文件输出的位置
