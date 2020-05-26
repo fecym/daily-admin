@@ -327,10 +327,12 @@ export default class ConsumeList extends Vue {
     padding: 20px;
   }
   .pagination {
-    position: absolute;
-    left: 50%;
-    bottom: 10px;
-    transform: translateX(-50%);
+    text-align: center;
+    margin-top: 20px;
+    // position: absolute;
+    // left: 50%;
+    // bottom: 10px;
+    // transform: translateX(-50%);
   }
 }
 </style>

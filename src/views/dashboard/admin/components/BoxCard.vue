@@ -71,6 +71,8 @@ export default class extends Vue {
   }
 
   get nickname() {
+    console.log(UserModule.userInfo.nickname, 'UserModule.userInfo.nickname')
+
     return UserModule.userInfo.nickname
   }
 }
@@ -134,7 +136,7 @@ export default class extends Vue {
 
   @media only screen and (max-width: 1510px){
     .mallki-text{
-      display: none;
+      // display: none;
     }
   }
 }

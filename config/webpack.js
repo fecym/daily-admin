@@ -2,7 +2,7 @@ const webpack = require('webpack')
 const path = require('path')
 const DLL_DIR = '../public/dll/'
 
-const ParallelUglifyPlugin = require("webpack-parallel-uglify-plugin");
+const TerserPlugin = require('terser-webpack-plugin')
 
 const CompressionWebpackPlugin = require("compression-webpack-plugin");
 const productionGzipExtensions = ["js", "css"];
@@ -10,7 +10,8 @@ const productionGzipExtensions = ["js", "css"];
 const isProduction = process.env.NODE_ENV === "production";
 
 const HappyPack = require('happypack')
-const happyThreadPool = HappyPack.ThreadPool({ size: require('os').cpus().length })
+const parallel = require('os').cpus().length
+const happyThreadPool = HappyPack.ThreadPool({ size: parallel })
 const createHappyPlugin = (id, loaders) => new HappyPack({
   id,
   loaders,
@@ -42,7 +43,8 @@ module.exports = {
     //   'echarts': "echarts"
     // })
     // 分割vendor
-    isProduction &&
+
+    if (isProduction) {
       config.optimization.splitChunks({
         chunks: "all",
         cacheGroups: {
@@ -66,9 +68,19 @@ module.exports = {
           }
         }
       });
+      config.optimization.runtimeChunk('single')
 
-    isProduction && config.optimization.runtimeChunk('single')
-
+      config.optimization.minimizer('js').use(TerserPlugin, [{
+        terserOptions: {
+          cache: true,
+          parallel: parallel - 1,
+          compress: {
+            drop_console: true,
+            pure_funcs: ['console.log']
+          }
+        }
+      }])
+    }
   },
   configureWebpack: config => {
     const pluginsBase = [
