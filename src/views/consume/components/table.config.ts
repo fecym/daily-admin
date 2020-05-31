@@ -23,6 +23,12 @@ export default [
     title: '购买生活用品明细',
     details: 'repastIntro'
   },
+  // {
+  //   label: '酒水饮料',
+  //   prop: 'drinksPrice',
+  //   title: '酒水饮料明细',
+  //   details: 'drinksIntro'
+  // },
   {
     label: '出行',
     prop: 'vehiclePrice',

@@ -59,6 +59,11 @@ module.exports = {
             priority: 20, // the weight needs to be larger than libs and app or it will be packaged into libs or app
             test: /[\\/]node_modules[\\/]echarts[\\/]/ // in order to adapt to cnpm
           },
+          elementUI: {
+            name: 'chunk-elementUI', // split elementUI into a single package
+            priority: 21, // the weight needs to be larger than libs and app or it will be packaged into libs or app
+            test: /[\\/]node_modules[\\/]_?element-ui(.*)/ // in order to adapt to cnpm
+          },
           commons: {
             name: 'chunk-commons-components',
             test: path.join(__dirname, '../src/components'), // can customize your rules
@@ -102,9 +107,9 @@ module.exports = {
         会检测当前文件中的映射，不会把已经存在映射的包再次打包进bundle.js */
         manifest: require(DLL_DIR + 'vendor-manifest.json')
       }),
-      new webpack.DllReferencePlugin({
-        manifest: require(DLL_DIR + 'elementUI-manifest.json')
-      }),
+      // new webpack.DllReferencePlugin({
+      //   manifest: require(DLL_DIR + 'elementUI-manifest.json')
+      // }),
       new webpack.DllReferencePlugin({
         manifest: require(DLL_DIR + 'vue-manifest.json')
       }),

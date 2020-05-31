@@ -11,7 +11,7 @@
     >
       <div
         class="card-panel"
-        @click="handleSetLineChartData('newVisitis')"
+        @click="handleSetLineChartData('blogVisitis')"
       >
         <div class="card-panel-icon-wrapper icon-people">
           <svg-icon
@@ -21,11 +21,11 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            New Visits
+            博客访问量
           </div>
           <count-to
             :start-val="0"
-            :end-val="102400"
+            :end-val="totalVisits"
             :duration="2600"
             class="card-panel-num"
           />
@@ -40,21 +40,21 @@
     >
       <div
         class="card-panel"
-        @click="handleSetLineChartData('messages')"
+        @click="handleSetLineChartData('task')"
       >
-        <div class="card-panel-icon-wrapper icon-message">
+        <div class="card-panel-icon-wrapper icon-task">
           <svg-icon
-            name="message"
+            name="task"
             class="card-panel-icon"
           />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Messages
+            当月完成任务量
           </div>
           <count-to
             :start-val="0"
-            :end-val="81212"
+            :end-val="360"
             :duration="3000"
             class="card-panel-num"
           />
@@ -69,21 +69,21 @@
     >
       <div
         class="card-panel"
-        @click="handleSetLineChartData('purchases')"
+        @click="handleSetLineChartData('consumeMonth')"
       >
         <div class="card-panel-icon-wrapper icon-money">
           <svg-icon
-            name="money"
+            name="summary"
             class="card-panel-icon"
           />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Purchases
+            当月消费金额
           </div>
           <count-to
             :start-val="0"
-            :end-val="9280"
+            :end-val="totalMonthAmount"
             :duration="3200"
             class="card-panel-num"
           />
@@ -98,21 +98,21 @@
     >
       <div
         class="card-panel"
-        @click="handleSetLineChartData('shoppings')"
+        @click="handleSetLineChartData('consumeYear')"
       >
         <div class="card-panel-icon-wrapper icon-shopping">
           <svg-icon
-            name="shopping"
+            name="money"
             class="card-panel-icon"
           />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Shoppings
+            年度消费金额
           </div>
           <count-to
             :start-val="0"
-            :end-val="13600"
+            :end-val="totalYearAmount"
             :duration="3600"
             class="card-panel-num"
           />
@@ -125,6 +125,13 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import CountTo from 'vue-count-to'
+import { BLOG_URL } from '@/utils/constant'
+// import { getBlogSummaryInfo } from '@/api/blog'
+import {
+  getBlogVisit,
+  getConsumeTotalAmountByYear,
+  getConsumeTotalAmountByMonth
+} from '@/api/summary'
 
 @Component({
   name: 'PanelGroup',
@@ -135,6 +142,35 @@ import CountTo from 'vue-count-to'
 export default class extends Vue {
   private handleSetLineChartData(type: string) {
     this.$emit('handleSetLineChartData', type)
+    const clickMap: IObject = {
+      blogVisitis: () => window.open(BLOG_URL, '_blank'),
+      task: () => false,
+      consumeMonth: () => this.$router.push({ name: 'consume-list' }),
+      consumeYear: () => false
+    }
+    clickMap[type]()
+  }
+
+  private created() {
+    this.initPanelData()
+  }
+
+  private totalVisits = 0
+  private totalYearAmount = 0
+  private totalMonthAmount = 0
+  private async initPanelData() {
+    try {
+      const results: any = await Promise.all([
+        getBlogVisit(),
+        getConsumeTotalAmountByYear(),
+        getConsumeTotalAmountByMonth()
+      ])
+      this.totalVisits = results[0].totalVisits as number
+      this.totalYearAmount = results[1].totalAmount as number
+      this.totalMonthAmount = results[2].totalAmount as number
+    } catch (error) {
+      console.log('extends -> initPanelData -> error', error)
+    }
   }
 }
 </script>
@@ -155,8 +191,8 @@ export default class extends Vue {
     overflow: hidden;
     color: #666;
     background: #fff;
-    box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
-    border-color: rgba(0, 0, 0, .05);
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.05);
 
     &:hover {
       .card-panel-icon-wrapper {
@@ -164,10 +200,10 @@ export default class extends Vue {
       }
 
       .icon-people {
-         background: #40c9c6;
+        background: #40c9c6;
       }
 
-      .icon-message {
+      .icon-task {
         background: #36a3f7;
       }
 
@@ -176,7 +212,7 @@ export default class extends Vue {
       }
 
       .icon-shopping {
-        background: #34bfa3
+        background: #34bfa3;
       }
     }
 
@@ -184,7 +220,7 @@ export default class extends Vue {
       color: #40c9c6;
     }
 
-    .icon-message {
+    .icon-task {
       color: #36a3f7;
     }
 
@@ -193,7 +229,7 @@ export default class extends Vue {
     }
 
     .icon-shopping {
-      color: #34bfa3
+      color: #34bfa3;
     }
 
     .card-panel-icon-wrapper {
@@ -229,7 +265,7 @@ export default class extends Vue {
   }
 }
 
-@media (max-width:550px) {
+@media (max-width: 550px) {
   .card-panel-description {
     display: none;
   }

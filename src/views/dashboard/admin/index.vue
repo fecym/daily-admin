@@ -5,7 +5,10 @@
     <panel-group @handleSetLineChartData="handleSetLineChartData" />
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="lineChartData" />
+      <line-chart
+        :chart-data="lineChartData"
+        :data="chartData"
+      />
     </el-row>
 
     <el-row :gutter="32">
@@ -75,31 +78,35 @@
 
 <script lang="ts">
 import 'echarts/theme/macarons.js' // Theme used in BarChart, LineChart, PieChart and RadarChart
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, ProvideReactive } from 'vue-property-decorator'
 import GithubCorner from '@/components/GithubCorner/index.vue'
 import BarChart from './components/BarChart.vue'
 import BoxCard from './components/BoxCard.vue'
 import LineChart, { ILineChartData } from './components/LineChart.vue'
+
 import PanelGroup from './components/PanelGroup.vue'
 import PieChart from './components/PieChart.vue'
 import RadarChart from './components/RadarChart.vue'
 import TodoList from './components/TodoList/index.vue'
 import TransactionTable from './components/TransactionTable.vue'
+import { CONSUME_MAP_SIMPLE, COLORS } from '@/utils/constant'
+import { getConsumeRecordByCurrentWeek, getConsumeTotalAmountByWeek } from '@/api/summary'
+import lineChartDataTemplate from './components/lineChart.conf'
 
 const lineChartData: { [type: string]: ILineChartData } = {
-  newVisitis: {
+  blogVisitis: {
     expectedData: [100, 120, 161, 134, 105, 160, 165],
     actualData: [120, 82, 91, 154, 162, 140, 145]
   },
-  messages: {
+  task: {
     expectedData: [200, 192, 120, 144, 160, 130, 140],
     actualData: [180, 160, 151, 106, 145, 150, 130]
   },
-  purchases: {
+  consumeWeek: {
     expectedData: [80, 100, 121, 104, 105, 90, 100],
     actualData: [120, 90, 100, 138, 142, 130, 130]
   },
-  shoppings: {
+  consumeYear: {
     expectedData: [130, 140, 141, 142, 145, 150, 160],
     actualData: [120, 82, 91, 154, 162, 140, 130]
   }
@@ -120,10 +127,62 @@ const lineChartData: { [type: string]: ILineChartData } = {
   }
 })
 export default class extends Vue {
-  private lineChartData = lineChartData.newVisitis
+  @ProvideReactive()
+  dashboardRoot = this
+
+  private lineChartData = lineChartData.blogVisitis
 
   private handleSetLineChartData(type: string) {
     this.lineChartData = lineChartData[type]
+  }
+
+  created() {
+    this.fetchData()
+  }
+
+  public weekRecords: any = []
+  private chartData: any = []
+  private totalWeek = 0
+  private async fetchData() {
+    try {
+      // this.weekRecords = await getConsumeRecordByCurrentWeek()
+      const rets: any = await Promise.all([getConsumeRecordByCurrentWeek(), getConsumeTotalAmountByWeek()])
+      this.weekRecords = rets[0]
+      this.totalWeek = rets[1].totalAmount as number
+      console.log('extends -> fetchData -> weekRecords', this.weekRecords)
+      this.chartData = this.dealWeekData(this.weekRecords)
+    } catch (error) {
+      console.log('extends -> fetchData -> error', error)
+    }
+  }
+
+  private dealWeekData(data: any) {
+    const consumeValues = Object.values(CONSUME_MAP_SIMPLE)
+    const consumeEntries = Object.entries(CONSUME_MAP_SIMPLE)
+    const result: any = { ...lineChartDataTemplate }
+    const weekEn: string[] = data.map((item: any) => item.weekEn)
+    const animationEasings = ['cubicInOut', 'quadraticOut', 'bounceInOut', 'circularInOut', 'backInOut']
+    consumeEntries.forEach((entries: [string, string], idx: number) => {
+      result.series.push({
+        name: entries[1],
+        itemStyle: {
+          color: COLORS[idx],
+          lineStyle: {
+            color: COLORS[idx],
+            width: 4
+          }
+        },
+        smooth: true,
+        type: 'line',
+        data: data.map((item: any) => item[entries[0]]),
+        animationDuration: 2800,
+        animationEasing: animationEasings[idx]
+      })
+    })
+    result.xAxis.data = weekEn
+    result.legend.data = consumeValues
+    result.title.text = `周合计：${this.totalWeek}`
+    return result
   }
 }
 </script>
@@ -148,7 +207,7 @@ export default class extends Vue {
   }
 }
 
-@media (max-width:1024px) {
+@media (max-width: 1024px) {
   .chart-wrapper {
     padding: 8px;
   }
