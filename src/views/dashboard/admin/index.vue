@@ -147,9 +147,10 @@ export default class extends Vue {
     try {
       // this.weekRecords = await getConsumeRecordByCurrentWeek()
       const rets: any = await Promise.all([getConsumeRecordByCurrentWeek(), getConsumeTotalAmountByWeek()])
+      console.log('extends -> fetchData -> rets', rets)
       this.weekRecords = rets[0]
       this.totalWeek = rets[1].totalAmount as number
-      console.log('extends -> fetchData -> weekRecords', this.weekRecords)
+      console.log('extends -> fetchData -> weekRecords', this.weekRecords, this.totalWeek)
       this.chartData = this.dealWeekData(this.weekRecords)
     } catch (error) {
       console.log('extends -> fetchData -> error', error)
