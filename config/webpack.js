@@ -47,22 +47,17 @@ module.exports = {
     if (isProduction) {
       config.optimization.splitChunks({
         chunks: "all",
+        automaticNameDelimiter: "-",
         cacheGroups: {
-          libs: {
-            name: 'chunk-libs',
+          vendor: {
             test: /[\\/]node_modules[\\/]/,
-            priority: 10,
-            chunks: 'initial' //只打包初始时依赖的第三方
-          },
-          echarts: {
-            name: 'chunk-echarts', // split elementUI into a single package
-            priority: 20, // the weight needs to be larger than libs and app or it will be packaged into libs or app
-            test: /[\\/]node_modules[\\/]echarts[\\/]/ // in order to adapt to cnpm
-          },
-          elementUI: {
-            name: 'chunk-elementUI', // split elementUI into a single package
-            priority: 21, // the weight needs to be larger than libs and app or it will be packaged into libs or app
-            test: /[\\/]node_modules[\\/]_?element-ui(.*)/ // in order to adapt to cnpm
+            name(module) {
+              const packageName = module.context.match(
+                /[\\/]node_modules[\\/](.*?)([\\/]|$)/
+              )[1];
+              return `chunk-${packageName.replace("@", "")}`;
+            },
+            priority: 10
           },
           commons: {
             name: 'chunk-commons-components',
