@@ -1,10 +1,11 @@
-export const name = 'consume-statistical-admin'
-export const PAGE_SIZES: Array<number> = [10, 30, 50, 100]
+import { deepFreeze } from '@/utils'
+export const name = 'daily-admin-v2'
+export const PAGE_SIZES: Array<number> = deepFreeze([10, 30, 50, 100])
 export const DEFAULT_AVATAR =
   'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
 
 export const BLOG_URL = 'https://chengyuming.cn'
-export const CONSUME_MAP = {
+export const CONSUME_MAP = deepFreeze({
   cosmeticPrice: '化妆品',
   // drinksPrice: '酒水饮料',
   lifePrice: '生活用品',
@@ -16,7 +17,7 @@ export const CONSUME_MAP = {
   transferAccounts: '转账',
   tripPrice: '旅游',
   vehiclePrice: '出行'
-}
+})
 
 export const CONSUME_MAP_SIMPLE = {
   repastPrice: '餐饮',
@@ -26,7 +27,7 @@ export const CONSUME_MAP_SIMPLE = {
   otherPrice: '其他'
 }
 
-export const COLORS: any = {
+export const COLORS: any = deepFreeze({
   0: '#2EC7C9',
   1: '#a560e8',
   2: '#5AB1EF',
@@ -36,4 +37,4 @@ export const COLORS: any = {
   // 6: '#ebffac',
   // 7: '#ffc2e5',
   // 8: '#ffaaaa'
-}
+})

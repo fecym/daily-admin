@@ -69,7 +69,10 @@ export default {
     payment: '消费管理',
     'consume-record': '消费记录',
     'consume-details': '消费详情',
-    'consume-statistics': '消费统计'
+    'consume-statistics': '消费统计',
+    'transfer-accounts': '转账管理',
+    'transfer-details': '转账详细',
+    'transfer-timeline': '时间轴'
   },
   steps: {
     Hamburger: '打开或者关闭侧边栏',

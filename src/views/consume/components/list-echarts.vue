@@ -10,8 +10,14 @@
     v-if="isShowEcharts"
     class="chart"
   >
-    <div ref="leftChart" />
-    <div ref="rightChart" />
+    <div
+      ref="leftChart"
+      class="chart-height"
+    />
+    <div
+      ref="rightChart"
+      class="chart-height"
+    />
   </section>
 </template>
 <script lang="ts">
@@ -20,15 +26,15 @@ import echarts, { ECharts } from 'echarts'
 import { leftChartsOption, rightChartsOption } from './list.echarts'
 @Component
 export default class ListEcharts extends Vue {
-  @Prop({ default: false }) private consumeInfo!: IConsumeInfo;
-  @Prop({ default: false }) private currentMonth!: IConsumeInfo;
+  @Prop({ default: false }) private consumeInfo!: IConsumeInfo
+  @Prop({ default: false }) private currentMonth!: IConsumeInfo
 
-  private isShowEcharts = false;
+  private isShowEcharts = false
   // 两个图表
-  public echart1: ECharts | null | object = {};
-  public echart2: ECharts | null | object = {};
-  public leftChart: HTMLCanvasElement | null = null;
-  public rightChart: HTMLCanvasElement | null = null;
+  public echart1: ECharts | null | object = {}
+  public echart2: ECharts | null | object = {}
+  public leftChart: HTMLCanvasElement | null = null
+  public rightChart: HTMLCanvasElement | null = null
   private initEcharts() {
     if (!this.consumeInfo) {
       this.isShowEcharts = false
@@ -102,9 +108,9 @@ export default class ListEcharts extends Vue {
   margin: 20px 0;
   margin-bottom: 0px;
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  height: calc(44vh - 110px);
+  // justify-content: space-around;
+  flex-wrap: wrap;
+  // align-items: center;
   // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   div {
@@ -112,6 +118,9 @@ export default class ListEcharts extends Vue {
     box-sizing: border-box;
     width: 40%;
     height: inherit;
+  }
+  .chart-height {
+    height: calc(44vh - 110px);
   }
 }
 </style>

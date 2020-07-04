@@ -7,7 +7,7 @@
  -->
 <template>
   <article class="consume-list public-page">
-    <section class="serach mb20">
+    <section class="search ">
       <el-form
         :inline="true"
         :model="searchQuery"
@@ -24,7 +24,7 @@
           />
         </el-form-item>
       </el-form>
-      <div class="search-btn">
+      <div class="search-btn mb20">
         <el-button
           type="primary"
           @click="search"
@@ -99,9 +99,9 @@
     </section>
     <section class="pagination">
       <el-pagination
-        :current-page="searchQuery.curPage"
+        :current-page="searchQuery.page"
         :page-sizes="PAGE_SIZES"
-        :page-size="searchQuery.pageSize"
+        :page-size="searchQuery.size"
         :total="totalRow"
         layout="total, sizes, prev, pager, next, jumper"
         @size-change="handleSizeChange"
@@ -159,8 +159,8 @@ export default class ConsumeList extends Vue {
     dateArr: null,
     startAt: null,
     endAt: null,
-    curPage: 1,
-    pageSize: 30
+    page: 1,
+    size: 30
   }
 
   private tableConfigList: Array<ITableConfig> = tableConfig
@@ -187,7 +187,7 @@ export default class ConsumeList extends Vue {
   }
 
   private indexMethod(idx: number) {
-    return idx + 1 + (this.searchQuery.curPage - 1) * this.searchQuery.pageSize
+    return idx + 1 + (this.searchQuery.page - 1) * this.searchQuery.size
   }
 
   private getList() {
@@ -227,12 +227,12 @@ export default class ConsumeList extends Vue {
 
   // 分页
   private handleSizeChange(val: number) {
-    this.searchQuery.pageSize = val
+    this.searchQuery.size = val
     this.search()
   }
 
   private handleCurrentChange(val: number) {
-    this.searchQuery.curPage = val
+    this.searchQuery.page = val
     this.search()
   }
 
@@ -298,9 +298,6 @@ export default class ConsumeList extends Vue {
   position: relative;
   padding-bottom: 10px;
   height: calc(100vh - 50px);
-  .el-form-item {
-    margin-bottom: 0;
-  }
   .link {
     margin: 0;
     cursor: pointer;
@@ -310,13 +307,6 @@ export default class ConsumeList extends Vue {
   }
   .info-item {
     text-indent: 2em;
-  }
-  .serach {
-    display: flex;
-    align-items: center;
-    div.search-btn {
-      margin-left: 20px;
-    }
   }
   .total-expenditure {
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1);

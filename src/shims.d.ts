@@ -42,7 +42,7 @@ declare module '*.bmp'
 declare module '*.tiff'
 
 interface IObject {
-  [kyes: string]: any
+  [key: string]: any
 }
 
 interface IUserInfo {
@@ -130,4 +130,19 @@ interface IConsumeResponseInfo {
   // 其他
   otherPrice: string
   otherIntro: string
+}
+
+interface IType {
+  label: string
+  value: string
+}
+
+interface IDic {
+  [key: string]: string
+}
+
+interface ITableConf {
+  label: string
+  prop: string
+  dic?: IDic
 }

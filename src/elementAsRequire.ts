@@ -50,7 +50,10 @@ import {
   Col,
   Switch,
   ColorPicker,
-  Progress
+  Progress,
+  Timeline,
+  TimelineItem,
+  InputNumber
 } from 'element-ui'
 
 Vue.use(Button)
@@ -87,6 +90,9 @@ Vue.use(Button)
   .use(Switch)
   .use(ColorPicker)
   .use(Progress)
+  .use(Timeline)
+  .use(TimelineItem)
+  .use(InputNumber)
 
 // 兼容通知方法
 Vue.prototype.$loading = Loading.service

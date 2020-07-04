@@ -21,6 +21,6 @@ export interface IQuery {
   dateArr: [string, string] | null
   startAt: string | null | undefined
   endAt: string | null | undefined
-  curPage: number
-  pageSize: number
+  page: number
+  size: number
 }

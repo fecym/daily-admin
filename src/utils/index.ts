@@ -90,3 +90,18 @@ export const toggleClass = (ele: HTMLElement, className: string) => {
   }
   ele.className = classString
 }
+
+/**
+ * 深度冻结对象，用于无需处理响应式的数据
+ * @param {*} o
+ */
+export const deepFreeze = (o: any) => {
+  const propNames = Object.getOwnPropertyNames(o)
+  propNames.forEach(name => {
+    const prop = o[name]
+    if (typeof prop === 'object' && prop !== null) {
+      deepFreeze(prop)
+    }
+  })
+  return Object.freeze(o)
+}

@@ -69,7 +69,10 @@ export default {
     payment: 'Payment',
     'consume-record': 'Pay Record',
     'consume-details': 'Pay Details',
-    'consume-statistics': 'Pay Statistics'
+    'consume-statistics': 'Pay Statistics',
+    'transfer-accounts': 'Transfer Accounts',
+    'transfer-details': 'Transfer Details',
+    'transfer-timeline': 'Transfer Timeline'
   },
   steps: {
     Hamburger: 'Open && Close sidebar',

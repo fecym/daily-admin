@@ -7,7 +7,7 @@
  -->
 <template>
   <article class="account-mgt public-page">
-    <section class="serach mb20">
+    <section class="search">
       <el-form
         :inline="true"
         :model="searchQuery"
@@ -147,9 +147,9 @@
     </section>
     <section class="pagination">
       <el-pagination
-        :current-page="searchQuery.curPage"
+        :current-page="searchQuery.page"
         :page-sizes="PAGE_SIZES"
-        :page-size="searchQuery.pageSize"
+        :page-size="searchQuery.size"
         :total="totalRow"
         layout="total, sizes, prev, pager, next, jumper"
         @size-change="handleSizeChange"
@@ -176,8 +176,8 @@ import AccountDialog from './components/dialog-account.vue'
 import { UserModule } from '@/store/modules/user'
 import { PAGE_SIZES } from '@/utils/constant'
 interface ISearchQuery {
-  curPage: number
-  pageSize: number
+  page: number
+  size: number
   realname: string
   username: string
   dataArr: Array<string | null>
@@ -195,12 +195,12 @@ export default class AccountMgt extends Vue {
   }
 
   private indexMethod(idx: number) {
-    return idx + 1 + (this.searchQuery.curPage - 1) * this.searchQuery.pageSize
+    return idx + 1 + (this.searchQuery.page - 1) * this.searchQuery.size
   }
 
   private searchQuery: ISearchQuery = {
-    curPage: 1,
-    pageSize: 10,
+    page: 1,
+    size: 10,
     realname: '',
     username: '',
     dataArr: [],
@@ -266,12 +266,12 @@ export default class AccountMgt extends Vue {
   }
 
   private handleSizeChange(val: number) {
-    this.searchQuery.pageSize = val
+    this.searchQuery.size = val
     this.search()
   }
 
   private handleCurrentChange(val: number) {
-    this.searchQuery.curPage = val
+    this.searchQuery.page = val
     this.search()
   }
 
@@ -297,20 +297,9 @@ export default class AccountMgt extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-.account-mgt {
-  .serach {
-    display: flex;
-    align-items: center;
-    div.search-btn {
-      margin-left: 20px;
-    }
-  }
-  .el-form-item {
-    margin-bottom: 0;
-  }
-  .pagination {
-    margin-top: 20px;
-    text-align: center;
-  }
-}
+// .account-mgt {
+//   .el-form-item {
+//     margin-bottom: 0;
+//   }
+// }
 </style>
