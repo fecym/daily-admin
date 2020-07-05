@@ -1,6 +1,6 @@
 <template>
   <div class="transfer-account public-page">
-    <section class="search ">
+    <section class="search">
       <el-form
         :inline="true"
         :model="queryInfo"
@@ -8,12 +8,9 @@
       >
         <el-form-item label="转账时间">
           <el-date-picker
-            v-model="queryInfo.dateArr"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            value-format="yyyy-MM-dd hh:mm:ss"
+            v-model="queryInfo.transferTime"
+            type="date"
+            placeholder="选择日期"
           />
         </el-form-item>
         <el-form-item label="转账类型">
@@ -30,10 +27,17 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="借钱人">
+        <el-form-item label="转账人">
           <el-input
-            v-model="queryInfo.username"
+            v-model="queryInfo.transferName"
             placeholder="请输入借钱人"
+            clearable
+          />
+        </el-form-item>
+        <el-form-item label="转账金额">
+          <el-input
+            v-model="queryInfo.amount"
+            placeholder="请输入转账金额范围"
             clearable
           />
         </el-form-item>
@@ -59,7 +63,10 @@
       :table-conf="tableConf"
       :total="total"
       :query-info="queryInfo"
-      operate
+      :operate="true"
+      @current-change="handleCurrentChange"
+      @size-change="handleSizeChange"
+      @operate-details="gotoDetails"
     />
   </div>
 </template>
@@ -67,7 +74,10 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { transferTypes } from './utils/constant'
+import { ITransferInfo } from './utils/types'
+
 import BaseTable from '@/components/BaseTable.vue'
+import { getTransferList } from '@/api/transfer'
 
 @Component({ components: { BaseTable } })
 export default class TransferAccount extends Vue {
@@ -75,12 +85,73 @@ export default class TransferAccount extends Vue {
     return transferTypes
   }
 
-  private queryInfo: IObject = {}
-  private tableConf: Array<ITableConf> = []
+  private queryInfo: IObject = {
+    page: 1,
+    size: 10,
+    transferTime: '',
+    type: '',
+    transferName: '',
+    amount: ''
+  }
+
+  private tableConf: Array<ITableConf> = [
+    {
+      label: '转账时间',
+      prop: 'transferTime'
+    },
+    {
+      label: '转账人',
+      prop: 'transferName'
+    },
+    {
+      label: '转账金额',
+      prop: 'amount'
+    },
+    {
+      label: '转账类型',
+      prop: 'type',
+      dic: { 0: '借钱', 1: '还钱' }
+    },
+    {
+      label: '还款时间',
+      prop: 'repaymentTime'
+    }
+  ]
+
   private total = 0
   private list: Array<IObject> = []
 
-  private search() {}
+  private created() {
+    this.search()
+  }
+
+  private async search() {
+    try {
+      const { list, total } = (await getTransferList(this.queryInfo)) as IObject
+      this.list = list
+      console.log('TransferAccount -> search -> this.list', this.list)
+      this.total = total
+    } catch (e) {
+      console.log('TransferAccount -> search -> e', e)
+    }
+  }
+
+  private handleCurrentChange(val: number) {
+    this.queryInfo.page = val
+    this.search()
+  }
+
+  private handleSizeChange(val: number) {
+    this.queryInfo.size = val
+    this.search()
+  }
+
+  private gotoDetails(row: ITransferInfo) {
+    this.$router.push({
+      name: 'transfer-details',
+      query: { id: row.id as string }
+    })
+  }
 }
 </script>
 

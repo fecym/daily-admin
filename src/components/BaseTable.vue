@@ -1,11 +1,24 @@
 <template>
   <div class="base-table">
-    <el-table style="width: 100%" :data="data" stripe tooltip-effect="light">
-      <el-table-column type="index" width="100" :index="indexMethod" label="序号" />
+    <el-table
+      style="width: 100%"
+      :data="data"
+      stripe
+      tooltip-effect="light"
+      border
+    >
+      <el-table-column
+        type="index"
+        width="100"
+        :index="indexMethod"
+        label="序号"
+        align="center"
+      />
       <el-table-column
         v-for="(item, idx) in tableConf"
         :key="idx"
         show-overflow-tooltip
+        align="center"
         :label="item.label"
         :width="item.width || ''"
       >
@@ -14,10 +27,26 @@
           <span v-else>{{ scope.row[item.prop] }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="operate" width="150" label="操作">
+      <el-table-column
+        v-if="operate"
+        width="150"
+        label="操作"
+        align="center"
+      >
         <template slot-scope="scope">
-          <el-button type="text" @click="$emit('operate-details', scope.row)">详情</el-button>
-          <el-button v-if="isDel" type="text" @click="$emit('operate-del', scope.row)">删除</el-button>
+          <el-button
+            type="text"
+            @click="$emit('operate-details', scope.row)"
+          >
+            详情
+          </el-button>
+          <el-button
+            v-if="isDel"
+            type="text"
+            @click="$emit('operate-del', scope.row)"
+          >
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -37,7 +66,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
 
 import { PAGE_SIZES } from '@/utils/constant'
 
@@ -58,11 +87,16 @@ export default class BaseTable extends Vue {
       page: 1
     })
   })
+  private queryInfo!: IObject
+
   get PAGE_SIZES() {
     return PAGE_SIZES
   }
 
-  private queryInfo!: IObject
+  @Watch('data')
+  private onLangChange(val: any) {
+    console.log(this.data, val)
+  }
 
   public indexMethod(idx: number) {
     return idx + 1 + (this.queryInfo.page - 1) * this.queryInfo.size

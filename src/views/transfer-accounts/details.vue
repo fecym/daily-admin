@@ -1,31 +1,85 @@
 <template>
   <div class="form">
-    <el-form :model="info" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-      <el-form-item label="转账时间" prop="transferTime">
-        <el-date-picker v-model="info.transferTime" type="date" placeholder="选择日期" class="w220"></el-date-picker>
+    <el-form
+      ref="ruleForm"
+      :model="info"
+      :rules="rules"
+      label-width="100px"
+      class="demo-ruleForm"
+    >
+      <el-form-item
+        label="转账时间"
+        prop="transferTime"
+      >
+        <el-date-picker
+          v-model="info.transferTime"
+          type="datetime"
+          placeholder="选择日期"
+          class="w220"
+        />
       </el-form-item>
-      <el-form-item label="转账人" prop="transferName">
-        <el-input v-model="info.transferName" style="width: 220px" placeholder="请输入转账人姓名" clearable></el-input>
+      <el-form-item
+        label="转账人"
+        prop="transferName"
+      >
+        <el-input
+          v-model="info.transferName"
+          style="width: 220px"
+          placeholder="请输入转账人姓名"
+          clearable
+        />
       </el-form-item>
-      <el-form-item label="转账金额" prop="amount">
+      <el-form-item
+        label="转账金额"
+        prop="amount"
+      >
         <!-- <el-input v-model="info.amount"></el-input> -->
-        <el-input-number v-model="info.amount" :min="1" :step="10" :precision="2" label="转账金额"  style="width: 220px"></el-input-number>
+        <el-input-number
+          v-model="info.amount"
+          :min="1"
+          :step="10"
+          :precision="2"
+          label="转账金额"
+          style="width: 220px"
+        />
       </el-form-item>
-      <el-form-item label="转账类型" prop="type">
-        <el-select v-model="info.type" placeholder="请选择转账类型" clearable class="w220">
+      <el-form-item
+        label="转账类型"
+        prop="type"
+      >
+        <el-select
+          v-model="info.type"
+          placeholder="请选择转账类型"
+          clearable
+          class="w220"
+        >
           <el-option
             v-for="item in transferTypes"
             :key="item.value"
             :label="item.label"
-            :value="item.value"
+            :value="+item.value"
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="还款时间" prop="repaymentTime" v-if="info.type === '0'">
-        <el-date-picker v-model="info.repaymentTime" type="date" placeholder="选择日期" class="w220"></el-date-picker>
+      <el-form-item
+        v-if="info.type === 0"
+        label="还款时间"
+        prop="repaymentTime"
+      >
+        <el-date-picker
+          v-model="info.repaymentTime"
+          type="datetime"
+          placeholder="选择日期"
+          class="w220"
+        />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
+        <el-button
+          type="primary"
+          @click="submitForm('ruleForm')"
+        >
+          保存
+        </el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -35,25 +89,36 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { ITransferInfo } from './utils/types'
 import { transferTypes } from './utils/constant'
+import {
+  createTransferRecord,
+  updateTransferRecord,
+  getTransferInfo
+} from '@/api/transfer'
 
 @Component
 export default class TransferAccountDetails extends Vue {
   get transferTypes() {
     return transferTypes
   }
+
+  get id() {
+    return this.$route.query.id || ''
+  }
+
   private info: ITransferInfo = {
     transferName: '',
     createTime: '',
-    type: '0',
+    type: '',
     amount: 0,
     repaymentTime: '',
     transferTime: '',
     updateTime: ''
   }
+
   private rules: any = {
     transferName: [
       { required: true, message: '请输入转账者姓名', trigger: 'blur' },
-      { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+      { min: 2, max: 9, message: '长度在 2 到 9 个字符', trigger: 'blur' }
     ],
     amount: [{ required: true, message: '请输入转账金额', trigger: 'blur' }],
     type: [{ required: true, message: '请选择转账类型', trigger: 'change' }],
@@ -61,11 +126,54 @@ export default class TransferAccountDetails extends Vue {
       { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
     ]
   }
+
+  private created() {
+    if (this.id) {
+      this.getInfo()
+    }
+  }
+
+  private async getInfo() {
+    try {
+      this.info = (await getTransferInfo({ id: this.id })) as any
+    } catch (e) {
+      console.log('TransferAccountDetails -> getInfo -> e', e)
+    }
+  }
+
+  private async create() {
+    try {
+      await createTransferRecord(this.info)
+      this.$message.success('创建成功')
+      this.$router.push({ name: 'transfer-list' })
+    } catch (e) {
+      console.log('TransferAccountDetails -> submitForm -> e', e)
+    }
+  }
+
+  private async updateInfo() {
+    console.log('修改数据成功')
+
+    try {
+      await updateTransferRecord(this.info)
+      this.$message.success('修改数据成功')
+      this.$router.push({ name: 'transfer-list' })
+    } catch (e) {
+      console.log('TransferAccountDetails -> submitForm -> e', e)
+    }
+  }
+
   private submitForm(formName: string) {
+    console.log('TransferAccountDetails -> submitForm -> formName', formName)
     // @ts-ignore
     this.$refs[formName].validate((valid: boolean) => {
+      console.log('TransferAccountDetails -> submitForm -> valid', valid)
       if (valid) {
-        alert('submit!')
+        if (this.id) {
+          this.updateInfo()
+        } else {
+          this.create()
+        }
       } else {
         console.log('error submit!!')
         return false

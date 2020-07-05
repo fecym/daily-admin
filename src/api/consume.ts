@@ -40,7 +40,7 @@ export const updateConsumeInfo = (data: object) =>
 // 获取首页图表数据
 export const getEchartsInfo = (params?: object) =>
   request({
-    url: API + '/get/hometEchartsInfo',
+    url: API + '/get/homeEchartsInfo',
     method: 'GET',
     params
   })
