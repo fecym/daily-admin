@@ -48,13 +48,15 @@ export const parseTime = (
 
 // Format and filter json data using filterKeys array
 export const formatJson = (filterKeys: any, jsonData: any) =>
-  jsonData.map((data: any) => filterKeys.map((key: string) => {
-    if (key === 'timestamp') {
-      return parseTime(data[key])
-    } else {
-      return data[key]
-    }
-  }))
+  jsonData.map((data: any) =>
+    filterKeys.map((key: string) => {
+      if (key === 'timestamp') {
+        return parseTime(data[key])
+      } else {
+        return data[key]
+      }
+    })
+  )
 
 // Check if an element has a class
 export const hasClass = (ele: HTMLElement, className: string) => {
@@ -104,4 +106,17 @@ export const deepFreeze = (o: any) => {
     }
   })
   return Object.freeze(o)
+}
+
+/**
+ * 下拉框label数据转字典
+ * @param {*} labelData
+ */
+export const parseLabelToDic: IDic | any = (labelData: Array<IType>) => {
+  if (!Array.isArray(labelData)) return {}
+  const result: IDic = {}
+  labelData.forEach((item: IType) => {
+    result[item.value] = item.label
+  })
+  return result
 }

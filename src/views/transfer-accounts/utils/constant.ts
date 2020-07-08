@@ -1,5 +1,5 @@
-import { deepFreeze } from '@/utils'
-export const transferTypes = deepFreeze([
+import { deepFreeze, parseLabelToDic } from '@/utils'
+export const transferTypes: Array<IType> = deepFreeze([
   {
     label: '借钱',
     value: 0
@@ -9,3 +9,5 @@ export const transferTypes = deepFreeze([
     value: 1
   }
 ])
+
+export const transferDic: IDic = parseLabelToDic(transferTypes)

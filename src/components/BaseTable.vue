@@ -3,8 +3,6 @@
     <el-table
       style="width: 100%"
       :data="data"
-      stripe
-      tooltip-effect="light"
       border
     >
       <el-table-column
