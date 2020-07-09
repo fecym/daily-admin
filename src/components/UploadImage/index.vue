@@ -76,6 +76,7 @@ export default class extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import '@/styles/_mixins';
 .upload-container {
   width: 100%;
   position: relative;

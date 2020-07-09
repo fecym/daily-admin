@@ -73,6 +73,95 @@
           class="w220"
         />
       </el-form-item>
+      <el-form-item
+        label="转账方式"
+        prop="transferMode"
+      >
+        <el-select
+          v-model="info.transferMode"
+          placeholder="请选择转账方式"
+          clearable
+          class="w220"
+        >
+          <el-option
+            v-for="item in transferModes"
+            :key="item.value"
+            :label="item.label"
+            :value="+item.value"
+          />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item
+        label="转账截图"
+        prop="files"
+      >
+        <el-upload
+          action="#"
+          list-type="picture-card"
+          :auto-upload="false"
+        >
+          <i
+            slot="default"
+            class="el-icon-plus"
+          />
+          <div
+            slot="file"
+            slot-scope="{file}"
+          >
+            <img
+              class="el-upload-list__item-thumbnail"
+              :src="file.url"
+              alt
+            >
+            <span class="el-upload-list__item-actions">
+              <span
+                class="el-upload-list__item-preview"
+                @click="handlePictureCardPreview(file)"
+              >
+                <i class="el-icon-zoom-in" />
+              </span>
+              <span
+                v-if="!disabled"
+                class="el-upload-list__item-delete"
+                @click="handleDownload(file)"
+              >
+                <i class="el-icon-download" />
+              </span>
+              <span
+                v-if="!disabled"
+                class="el-upload-list__item-delete"
+                @click="handleRemove(file)"
+              >
+                <i class="el-icon-delete" />
+              </span>
+            </span>
+          </div>
+        </el-upload>
+        <el-dialog :visible.sync="dialogVisible">
+          <img
+            width="100%"
+            :src="dialogImageUrl"
+            alt
+          >
+        </el-dialog>
+      </el-form-item>
+
+      <el-form-item
+        label="备注"
+        prop="remake"
+      >
+        <el-input
+          v-model="info.remake"
+          style="width: 220px"
+          placeholder="还有什么要补充的..."
+          type="textarea"
+          :autosize="{minRows: 2, maxRows: 4}"
+          show-word-limit
+          maxlength="500"
+          clearable
+        />
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -88,7 +177,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { ITransferInfo } from './utils/types'
-import { transferTypes } from './utils/constant'
+import { transferTypes, transferModes } from './utils/constant'
 import {
   createTransferRecord,
   updateTransferRecord,
@@ -101,8 +190,30 @@ export default class TransferAccountDetails extends Vue {
     return transferTypes
   }
 
+  get transferModes() {
+    return transferModes
+  }
+
   get id() {
     return this.$route.query.id || ''
+  }
+
+  private dialogImageUrl = ''
+  private dialogVisible = false
+  private disabled = false
+
+  private handleRemove(file: File) {
+    console.log(file)
+  }
+
+  private handlePictureCardPreview(file: any) {
+    console.log('TransferAccountDetails -> handlePictureCardPreview -> file', file)
+    this.dialogImageUrl = file.url
+    this.dialogVisible = true
+  }
+
+  private handleDownload(file: File) {
+    console.log(file)
   }
 
   private info: ITransferInfo = {
@@ -112,7 +223,10 @@ export default class TransferAccountDetails extends Vue {
     amount: 0,
     repaymentTime: '',
     transferTime: '',
-    updateTime: ''
+    updateTime: '',
+    transferMode: 1,
+    files: [],
+    remake: ''
   }
 
   private rules: any = {
@@ -122,6 +236,9 @@ export default class TransferAccountDetails extends Vue {
     ],
     amount: [{ required: true, message: '请输入转账金额', trigger: 'blur' }],
     type: [{ required: true, message: '请选择转账类型', trigger: 'change' }],
+    transferMode: [
+      { required: true, message: '请选择转账方式', trigger: 'change' }
+    ],
     transferTime: [
       { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
     ]

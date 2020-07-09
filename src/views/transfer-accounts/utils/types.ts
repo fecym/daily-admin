@@ -8,4 +8,7 @@ export interface ITransferInfo {
   repaymentTime?: string
   transferTime: string
   updateTime: string
+  transferMode: string | number
+  files: Array<any>
+  remake: string
 }

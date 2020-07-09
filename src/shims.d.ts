@@ -134,7 +134,7 @@ interface IConsumeResponseInfo {
 
 interface IType {
   label: string
-  value: string
+  value: string | number
 }
 
 interface IDic {

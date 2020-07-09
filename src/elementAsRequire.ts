@@ -54,7 +54,8 @@ import {
   Timeline,
   TimelineItem,
   InputNumber,
-  Tag
+  Tag,
+  Upload
 } from 'element-ui'
 
 Vue.use(Button)
@@ -95,6 +96,7 @@ Vue.use(Button)
   .use(TimelineItem)
   .use(InputNumber)
   .use(Tag)
+  .use(Upload)
 
 // 兼容通知方法
 Vue.prototype.$loading = Loading.service
