@@ -47,7 +47,7 @@
         label="转账类型"
         prop="type"
       >
-        <el-select
+        <!-- <el-select
           v-model="info.type"
           placeholder="请选择转账类型"
           clearable
@@ -59,7 +59,16 @@
             :label="item.label"
             :value="+item.value"
           />
-        </el-select>
+        </el-select>-->
+        <el-radio-group v-model.number="info.type">
+          <el-radio
+            v-for="item in transferTypes"
+            :key="item.value"
+            :label="+item.value"
+          >
+            {{ item.label }}
+          </el-radio>
+        </el-radio-group>
       </el-form-item>
       <el-form-item
         v-if="info.type === 0"
@@ -77,19 +86,23 @@
         label="转账方式"
         prop="transferMode"
       >
-        <el-select
-          v-model="info.transferMode"
-          placeholder="请选择转账方式"
-          clearable
-          class="w220"
-        >
+        <!-- <el-select v-model="info.transferMode" placeholder="请选择转账方式" clearable class="w220">
           <el-option
             v-for="item in transferModes"
             :key="item.value"
             :label="item.label"
             :value="+item.value"
           />
-        </el-select>
+        </el-select> -->
+        <el-radio-group v-model.number="info.transferMode">
+          <el-radio
+            v-for="item in transferModes"
+            :key="item.value"
+            :label="+item.value"
+          >
+            {{ item.label }}
+          </el-radio>
+        </el-radio-group>
       </el-form-item>
 
       <el-form-item
@@ -151,9 +164,9 @@
         label="备注"
         prop="remake"
       >
+        <!-- style="width: 220px" -->
         <el-input
           v-model="info.remake"
-          style="width: 220px"
           placeholder="还有什么要补充的..."
           type="textarea"
           :autosize="{minRows: 2, maxRows: 4}"
@@ -207,7 +220,10 @@ export default class TransferAccountDetails extends Vue {
   }
 
   private handlePictureCardPreview(file: any) {
-    console.log('TransferAccountDetails -> handlePictureCardPreview -> file', file)
+    console.log(
+      'TransferAccountDetails -> handlePictureCardPreview -> file',
+      file
+    )
     this.dialogImageUrl = file.url
     this.dialogVisible = true
   }
@@ -219,7 +235,7 @@ export default class TransferAccountDetails extends Vue {
   private info: ITransferInfo = {
     transferName: '',
     createTime: '',
-    type: '',
+    type: 0,
     amount: 0,
     repaymentTime: '',
     transferTime: '',

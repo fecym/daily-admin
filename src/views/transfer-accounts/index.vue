@@ -113,6 +113,11 @@ export default class TransferAccount extends Vue {
       dic: { 0: '借钱', 1: '还钱' }
     },
     {
+      label: '转账方式',
+      prop: 'transferMode',
+      dic: { 1: '支付宝', 2: '微信', 3: '银行卡' }
+    },
+    {
       label: '还款时间',
       prop: 'repaymentTime'
     }

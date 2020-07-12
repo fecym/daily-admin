@@ -1,9 +1,9 @@
 <template>
   <div class="base-table">
     <el-table
-      style="width: 100%"
-      :data="data"
       border
+      :data="data"
+      style="width: 100%"
     >
       <el-table-column
         type="index"
@@ -22,7 +22,7 @@
       >
         <template slot-scope="scope">
           <span v-if="item.dic">{{ item.dic[scope.row[item.prop]] }}</span>
-          <span v-else>{{ scope.row[item.prop] }}</span>
+          <span v-else>{{ scope.row[item.prop] || '--' }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -32,19 +32,15 @@
         align="center"
       >
         <template slot-scope="scope">
-          <el-button
-            type="text"
+          <span
+            class="modify-btn"
             @click="$emit('operate-details', scope.row)"
-          >
-            详情
-          </el-button>
-          <el-button
+          >详情</span>
+          <span
             v-if="isDel"
-            type="text"
+            class="modify-btn"
             @click="$emit('operate-del', scope.row)"
-          >
-            删除
-          </el-button>
+          >删除</span>
         </template>
       </el-table-column>
     </el-table>
