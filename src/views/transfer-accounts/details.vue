@@ -110,9 +110,12 @@
         prop="files"
       >
         <el-upload
-          action="#"
+          :action="uploadApi"
           list-type="picture-card"
-          :auto-upload="false"
+          :auto-upload="true"
+          multiple
+          name="files"
+          :limit="5"
         >
           <i
             slot="default"
@@ -197,8 +200,18 @@ import {
   getTransferInfo
 } from '@/api/transfer'
 
+import { FILE_API } from '@/api/file'
+
 @Component
 export default class TransferAccountDetails extends Vue {
+  get uploadApi() {
+    return FILE_API + '/upload'
+  }
+
+  get downlowFilePath() {
+    return process.env.FILE_PATH
+  }
+
   get transferTypes() {
     return transferTypes
   }
