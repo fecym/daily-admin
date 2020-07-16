@@ -109,58 +109,7 @@
         label="转账截图"
         prop="files"
       >
-        <el-upload
-          :action="uploadApi"
-          list-type="picture-card"
-          :auto-upload="true"
-          multiple
-          name="files"
-          :limit="5"
-        >
-          <i
-            slot="default"
-            class="el-icon-plus"
-          />
-          <div
-            slot="file"
-            slot-scope="{file}"
-          >
-            <img
-              class="el-upload-list__item-thumbnail"
-              :src="file.url"
-              alt
-            >
-            <span class="el-upload-list__item-actions">
-              <span
-                class="el-upload-list__item-preview"
-                @click="handlePictureCardPreview(file)"
-              >
-                <i class="el-icon-zoom-in" />
-              </span>
-              <span
-                v-if="!disabled"
-                class="el-upload-list__item-delete"
-                @click="handleDownload(file)"
-              >
-                <i class="el-icon-download" />
-              </span>
-              <span
-                v-if="!disabled"
-                class="el-upload-list__item-delete"
-                @click="handleRemove(file)"
-              >
-                <i class="el-icon-delete" />
-              </span>
-            </span>
-          </div>
-        </el-upload>
-        <el-dialog :visible.sync="dialogVisible">
-          <img
-            width="100%"
-            :src="dialogImageUrl"
-            alt
-          >
-        </el-dialog>
+        <image-upload v-model="info.fileList"/>
       </el-form-item>
 
       <el-form-item
@@ -200,13 +149,11 @@ import {
   getTransferInfo
 } from '@/api/transfer'
 
-import { FILE_API } from '@/api/file'
+import ImageUpload from '@/components/ImageUpload.vue'
 
-@Component
+
+@Component({ components: { ImageUpload } })
 export default class TransferAccountDetails extends Vue {
-  get uploadApi() {
-    return FILE_API + '/upload'
-  }
 
   get downlowFilePath() {
     return process.env.FILE_PATH
@@ -224,27 +171,6 @@ export default class TransferAccountDetails extends Vue {
     return this.$route.query.id || ''
   }
 
-  private dialogImageUrl = ''
-  private dialogVisible = false
-  private disabled = false
-
-  private handleRemove(file: File) {
-    console.log(file)
-  }
-
-  private handlePictureCardPreview(file: any) {
-    console.log(
-      'TransferAccountDetails -> handlePictureCardPreview -> file',
-      file
-    )
-    this.dialogImageUrl = file.url
-    this.dialogVisible = true
-  }
-
-  private handleDownload(file: File) {
-    console.log(file)
-  }
-
   private info: ITransferInfo = {
     transferName: '',
     createTime: '',
@@ -254,7 +180,7 @@ export default class TransferAccountDetails extends Vue {
     transferTime: '',
     updateTime: '',
     transferMode: 1,
-    files: [],
+    fileList: [],
     remake: ''
   }
 

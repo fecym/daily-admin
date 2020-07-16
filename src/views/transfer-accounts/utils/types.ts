@@ -9,6 +9,6 @@ export interface ITransferInfo {
   transferTime: string
   updateTime: string
   transferMode: string | number
-  files: Array<any>
+  fileList: Array<any>
   remake: string
 }
