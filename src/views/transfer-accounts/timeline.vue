@@ -16,8 +16,8 @@
         </el-radio-group>
       </el-form-item>
       <!-- lendOutMoney -->
-      <el-form-item label="转账人">
-        <span>共借出去：￥{{ lendOutMoney }}</span>
+      <el-form-item label="共借出去：" style="margin-left:50px">
+        <span>￥{{ lendOutMoney }}</span>
       </el-form-item>
       <el-form-item
         label="转账人"
