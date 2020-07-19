@@ -12,37 +12,38 @@ declare module '*.gif' {
 }
 
 // TODO: remove this part after vue-image-crop-upload has its typescript file
-declare module 'vue-image-crop-upload'
+declare module 'vue-image-crop-upload';
 
 // TODO: remove this part after vue-count-to has its typescript file
-declare module 'vue-count-to'
+declare module 'vue-count-to';
 
 // TODO: remove this part after vuedraggable has its typescript file
-declare module 'vuedraggable'
+declare module 'vuedraggable';
 
 // TODO: remove this part after vue-image-crop-upload has its typescript file
-declare module 'vue-image-crop-upload'
+declare module 'vue-image-crop-upload';
 
 // TODO: remove this part after vue-splitpane has its typescript file
-declare module 'vue-splitpane'
+declare module 'vue-splitpane';
 
 // 定义 locale
-declare module 'element-ui/lib/locale'
+declare module 'element-ui/lib/locale';
 
-declare module '*.css'
-declare module '*.less'
-declare module '*.scss'
-declare module '*.sass'
-declare module '*.svg'
-declare module '*.png'
-declare module '*.jpg'
-declare module '*.jpeg'
-declare module '*.gif'
-declare module '*.bmp'
-declare module '*.tiff'
+declare module '*.css';
+declare module '*.less';
+declare module '*.scss';
+declare module '*.sass';
+declare module '*.svg';
+declare module '*.png';
+declare module '*.jpg';
+declare module '*.jpeg';
+declare module '*.gif';
+declare module '*.bmp';
+declare module '*.tiff';
 
 interface IObject {
   [key: string]: any
+  [index: number]: any
 }
 
 interface IUserInfo {

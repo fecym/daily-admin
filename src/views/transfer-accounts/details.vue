@@ -93,7 +93,7 @@
             :label="item.label"
             :value="+item.value"
           />
-        </el-select> -->
+        </el-select>-->
         <el-radio-group v-model.number="info.transferMode">
           <el-radio
             v-for="item in transferModes"
@@ -109,7 +109,11 @@
         label="转账截图"
         prop="files"
       >
-        <image-upload v-model="info.fileList"/>
+        <image-upload
+          v-model="info.fileList"
+          accept=".jpg, .png"
+          :limit="5"
+        />
       </el-form-item>
 
       <el-form-item
@@ -135,6 +139,7 @@
           保存
         </el-button>
       </el-form-item>
+      <!-- <pre>{{ $data.info }}</pre> -->
     </el-form>
   </div>
 </template>
@@ -151,10 +156,8 @@ import {
 
 import ImageUpload from '@/components/ImageUpload.vue'
 
-
 @Component({ components: { ImageUpload } })
 export default class TransferAccountDetails extends Vue {
-
   get downlowFilePath() {
     return process.env.FILE_PATH
   }
@@ -180,6 +183,7 @@ export default class TransferAccountDetails extends Vue {
     transferTime: '',
     updateTime: '',
     transferMode: 1,
+    fileIds: '',
     fileList: [],
     remake: ''
   }
@@ -225,7 +229,6 @@ export default class TransferAccountDetails extends Vue {
 
   private async updateInfo() {
     console.log('修改数据成功')
-
     try {
       await updateTransferRecord(this.info)
       this.$message.success('修改数据成功')
@@ -235,22 +238,29 @@ export default class TransferAccountDetails extends Vue {
     }
   }
 
-  private submitForm(formName: string) {
+  private submit() {
+    if (this.id) {
+      this.updateInfo()
+    } else {
+      this.create()
+    }
+  }
+
+  private async submitForm(formName: string) {
     console.log('TransferAccountDetails -> submitForm -> formName', formName)
-    // @ts-ignore
-    this.$refs[formName].validate((valid: boolean) => {
-      console.log('TransferAccountDetails -> submitForm -> valid', valid)
-      if (valid) {
-        if (this.id) {
-          this.updateInfo()
-        } else {
-          this.create()
-        }
-      } else {
-        console.log('error submit!!')
-        return false
+    try {
+      // @ts-ignore
+      // const valid = await this.$refs[formName].validate()
+      const fileIds = this.info.fileList.map((file: any) => file.id)
+      this.info.fileIds = JSON.stringify(fileIds)
+      const { transferTime, transferName } = this.info
+      if (!transferTime || !transferName) {
+        return this.$message.warning('请填写必要的信息')
       }
-    })
+      this.submit()
+    } catch (e) {
+      console.log('TransferAccountDetails -> submitForm -> e', e)
+    }
   }
 }
 </script>

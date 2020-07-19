@@ -120,3 +120,11 @@ export const parseLabelToDic: IDic | any = (labelData: Array<IType>) => {
   })
   return result
 }
+
+/**
+ * 格式化金钱
+ * @param price
+ */
+export const formatPrice = (price: number | string) => {
+  return parseFloat(price as string).toLocaleString('zh', { style: 'decimal' })
+}

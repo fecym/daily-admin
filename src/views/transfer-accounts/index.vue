@@ -64,6 +64,8 @@
       :total="total"
       :query-info="queryInfo"
       :operate="true"
+      show-summary
+      :summary-method="getSummaries"
       @current-change="handleCurrentChange"
       @size-change="handleSizeChange"
       @operate-details="gotoDetails"
@@ -75,6 +77,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { transferTypes } from './utils/constant'
 import { ITransferInfo } from './utils/types'
+import { formatPrice } from '@/utils'
 
 import BaseTable from '@/components/BaseTable.vue'
 import { getTransferList } from '@/api/transfer'
@@ -156,6 +159,40 @@ export default class TransferAccount extends Vue {
       name: 'transfer-details',
       query: { id: row.id as string }
     })
+  }
+
+  // 表格合计行
+  private getSummaries(param: any) {
+    // 汇总： amount 属性
+    const { columns, data } = param
+    const sums: string[] | number[] = []
+    columns.forEach((column: any, index: number) => {
+      switch (index) {
+        case 0:
+          sums[index] = '合计'
+          break
+        case 3:
+          sums[index] = data.reduce((prev: any, curr: any) => {
+            const value = Number(curr.amount)
+            if (!isNaN(value)) {
+              if (curr.type === 0) {
+                return prev + value
+              } else {
+                return prev - value
+              }
+            } else {
+              return prev
+            }
+          }, 0)
+          sums[index] = '￥' + formatPrice(sums[index] as number)
+          break
+        default:
+          sums[index] = '--'
+          break
+      }
+    })
+    console.log('ConsumeList -> getSummaries -> sums', sums)
+    return sums
   }
 }
 </script>

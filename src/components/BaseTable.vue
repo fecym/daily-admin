@@ -4,6 +4,7 @@
       border
       :data="data"
       style="width: 100%"
+      v-bind="$attrs"
     >
       <el-table-column
         type="index"
@@ -60,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { Component, Vue, Prop } from 'vue-property-decorator'
 
 import { PAGE_SIZES } from '@/utils/constant'
 
@@ -85,11 +86,6 @@ export default class BaseTable extends Vue {
 
   get PAGE_SIZES() {
     return PAGE_SIZES
-  }
-
-  @Watch('data')
-  private onLangChange(val: any) {
-    console.log(this.data, val)
   }
 
   public indexMethod(idx: number) {

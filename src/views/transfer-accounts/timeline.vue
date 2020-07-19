@@ -15,6 +15,10 @@
           </el-radio>
         </el-radio-group>
       </el-form-item>
+      <!-- lendOutMoney -->
+      <el-form-item label="转账人">
+        <span>共借出去：￥{{ lendOutMoney }}</span>
+      </el-form-item>
       <el-form-item
         label="转账人"
         style="margin-left:50px"
@@ -78,6 +82,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import { getAllTransferRecords } from '@/api/transfer'
 import { ITransferInfo } from './utils/types'
 import { transferDic } from './utils/constant'
+import { formatPrice } from '@/utils'
 
 @Component
 export default class Timeline extends Vue {
@@ -95,10 +100,24 @@ export default class Timeline extends Vue {
     amount: ''
   }
 
+  private lendOutMoney: number | string = 0
   private list: Array<ITransferInfo> = []
   private async getList() {
     try {
       this.list = (await getAllTransferRecords(this.queryInfo)) as any
+      const lendOutMoney = this.list.reduce((prev: any, curr: any) => {
+        const value = Number(curr.amount)
+        if (!isNaN(value)) {
+          if (curr.type === 0) {
+            return prev + value
+          } else {
+            return prev - value
+          }
+        } else {
+          return prev
+        }
+      }, 0)
+      this.lendOutMoney = formatPrice(lendOutMoney)
     } catch (e) {
       console.log('Timeline -> getList -> e', e)
     }

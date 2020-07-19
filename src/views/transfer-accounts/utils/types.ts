@@ -11,4 +11,5 @@ export interface ITransferInfo {
   transferMode: string | number
   fileList: Array<any>
   remake: string
+  fileIds: string
 }
