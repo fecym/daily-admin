@@ -8,7 +8,7 @@
     >
       <el-table-column
         type="index"
-        width="100"
+        width="60"
         :index="indexMethod"
         label="序号"
         align="center"

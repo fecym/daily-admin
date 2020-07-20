@@ -108,7 +108,8 @@ export default class TransferAccount extends Vue {
     },
     {
       label: '转账金额',
-      prop: 'amount'
+      prop: 'amount',
+      width: '100px'
     },
     {
       label: '转账类型',

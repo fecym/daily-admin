@@ -145,5 +145,6 @@ interface IDic {
 interface ITableConf {
   label: string
   prop: string
+  width?: string
   dic?: IDic
 }

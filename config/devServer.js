@@ -5,7 +5,8 @@ const PROXY_ENV = process.env.PROXY_ENV || "prod";
 const targets = {
   dev: "http://localhost:3000",
   uat: "http://106.75.126.203:3000",
-  prod: "https://chengyuming.cn"
+  // prod: "https://chengyuming.cn"
+  prod: "http://chengyuming.cn"
 };
 
 if (process.env.NODE_ENV === 'development') {

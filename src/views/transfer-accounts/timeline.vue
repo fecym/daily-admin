@@ -16,7 +16,10 @@
         </el-radio-group>
       </el-form-item>
       <!-- lendOutMoney -->
-      <el-form-item label="共借出去：" style="margin-left:50px">
+      <el-form-item
+        label="共借出去："
+        style="margin-left:50px"
+      >
         <span>￥{{ lendOutMoney }}</span>
       </el-form-item>
       <el-form-item
