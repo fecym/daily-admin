@@ -1,6 +1,6 @@
 import request from '@/utils/request'
-import { isValidURL } from '@/utils/validate'
-import { DEFAULT_AVATAR } from '@/utils/constant'
+// import { isValidURL } from '@/utils/validate'
+// import { DEFAULT_AVATAR } from '@/utils/constant'
 
 const API = '/api/user'
 
@@ -18,11 +18,11 @@ export const getUserInfo = () => {
   const userInfo = JSON.parse(
     window.sessionStorage.getItem('userInfo') as string
   )
-  const avatar = DEFAULT_AVATAR
-  userInfo.avatar = isValidURL(userInfo.headPic) ? userInfo.headPic : avatar
+  // const avatar = DEFAULT_AVATAR
+  // userInfo.avatar = isValidURL(userInfo.headPic) ? userInfo.headPic : avatar
   return {
     data: {
-      avatar,
+      // avatar,
       introduction: '',
       ...userInfo
     }
@@ -62,6 +62,13 @@ export const switchGuide = (data: object) =>
     url: API + '/switch/guide',
     method: 'POST',
     data
+  })
+
+export const updateAvatar = (headPic: string) =>
+  request({
+    url: API + '/update/avatar',
+    method: 'POST',
+    data: { headPic }
   })
 
 export const logout = () =>

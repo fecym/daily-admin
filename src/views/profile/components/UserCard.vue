@@ -4,7 +4,13 @@
       slot="header"
       class="clearfix"
     >
-      <span>关于我</span>
+      <span class="fl">关于我</span>
+      <svg-icon
+        name="edit"
+        class="fr cursor-pointer"
+        title="修改头像"
+        @click="toggleShow"
+      />
     </div>
 
     <div class="user-profile">
@@ -31,7 +37,8 @@
     <div class="user-bio">
       <div class="user-education user-bio-section">
         <div class="user-bio-section-header">
-          <svg-icon name="education" /><span>{{ $t('user.sign') }}</span>
+          <svg-icon name="education" />
+          <span>{{ $t('user.sign') }}</span>
         </div>
         <div class="user-bio-section-body">
           <div class="text-muted">
@@ -42,7 +49,8 @@
 
       <div class="user-skills user-bio-section">
         <div class="user-bio-section-header">
-          <svg-icon name="skill" /><span>{{ $t('user.skills') }}</span>
+          <svg-icon name="skill" />
+          <span>{{ $t('user.skills') }}</span>
         </div>
         <div class="user-bio-section-body">
           <div class="progress-item">
@@ -67,22 +75,66 @@
         </div>
       </div>
     </div>
+    <avatar-upload
+      v-model="showImageUpload"
+      field="files"
+      :width="300"
+      :height="300"
+      @close="onClose"
+      @src-file-set="srcFileSet"
+      @crop-upload-success="onCropUploadSuccess"
+    />
   </el-card>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import PanThumb from '@/components/PanThumb/index.vue'
+import AvatarUpload from '@/components/AvatarUpload/index.vue'
+import { updateAvatar } from '@/api/users'
+import { UserModule } from '@/store/modules/user'
 
 @Component({
   name: 'UserCard',
   components: {
-    PanThumb
+    PanThumb,
+    AvatarUpload
   }
 })
 export default class extends Vue {
   @Prop({ required: true }) private user!: IUserInfo
   @Prop({ required: true }) private avatar!: string
+
+  private showImageUpload = false
+
+  private toggleShow() {
+    this.showImageUpload = !this.showImageUpload
+  }
+
+  private onClose() {
+    this.showImageUpload = false
+  }
+
+  private async onCropUploadSuccess({ data }: any, field: string) {
+    console.log('UInfo -> onCropUploadSuccess -> field', field)
+    console.log('UInfo -> onCropUploadSuccess -> data', data)
+    this.showImageUpload = false
+    // this.image = jsonData.files[field]
+    // 更新头像，更新用户信息
+    const fileUrl = data.url
+    console.log('extends -> onCropUploadSuccess -> fileUrl', fileUrl)
+    // UserModule.SET_AVATAR(fileUrl)
+    const userInfo: IUserInfo = { ...UserModule.userInfo }
+    userInfo.headPic = fileUrl
+    try {
+      await updateAvatar(fileUrl)
+      UserModule.SET_USERINFO(userInfo)
+      sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
+      this.$message.success('头像更新成功')
+    } catch (e) {
+      console.log('extends -> onCropUploadSuccess -> e', e)
+    }
+  }
 }
 </script>
 

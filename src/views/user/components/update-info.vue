@@ -63,16 +63,20 @@
           maxlength="11"
         />
       </el-form-item>
-      <el-form-item
+      <!-- <el-form-item
         label="用户头像"
         prop="headPic"
-      >
-        <el-input
-          v-model="info.headPic"
-          class="w300"
-          clearable
-        />
-      </el-form-item>
+      > -->
+      <!-- <el-input v-model="info.headPic" class="w300" clearable /> -->
+      <!-- <el-button
+          type="primary"
+          icon="el-icon-upload"
+          tyle="position: absolute;bottom: 15px;margin-left: 40px;"
+          @click="toggleShow"
+        >
+          更新头像
+        </el-button>
+      </el-form-item> -->
       <el-form-item
         label="性别"
         prop="sex"
@@ -114,8 +118,9 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { UserModule } from '@/store/modules/user'
 import { updateInfo } from '@/api/users'
-import { isValidURL } from '@/utils/validate'
-import { DEFAULT_AVATAR } from '@/utils/constant'
+// import { isValidURL } from '@/utils/validate'
+// import { DEFAULT_AVATAR } from '@/utils/constant'
+
 @Component
 export default class UInfo extends Vue {
   // ts，extends写法
@@ -183,7 +188,7 @@ export default class UInfo extends Vue {
 
   private save(formName: string) {
     // @ts-ignore
-    this.$refs[formName].validate(valid => {
+    this.$refs[formName].validate((valid) => {
       if (valid) {
         // @ts-ignore
         updateInfo(this.info)
@@ -192,10 +197,10 @@ export default class UInfo extends Vue {
               this.$message.success('修改成功')
               // 更新信息
               UserModule.SET_USERINFO(res)
-              const avatar = isValidURL(res.headPic)
-                ? res.headPic
-                : DEFAULT_AVATAR
-              UserModule.SET_AVATAR(avatar)
+              // const avatar = isValidURL(res.headPic)
+              //   ? res.headPic
+              //   : DEFAULT_AVATAR
+              // UserModule.SET_AVATAR(avatar)
               sessionStorage.setItem('userInfo', JSON.stringify(res))
             }
           })

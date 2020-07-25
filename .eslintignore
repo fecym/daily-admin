@@ -2,3 +2,5 @@ dist/*.js
 src/assets
 tests/unit/coverage
 public/**/*.js
+
+src/components/vue-image-crop-upload

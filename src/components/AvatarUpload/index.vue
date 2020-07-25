@@ -18,9 +18,10 @@
 </template>
 
 <script lang="ts">
-import ImageCropUpload from 'vue-image-crop-upload'
+import ImageCropUpload from '../vue-image-crop-upload/upload-2.vue'
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { AppModule } from '@/store/modules/app'
+import { FILE_API } from '@/api/file'
 
 @Component({
   name: 'AvatarUpload',
@@ -31,12 +32,17 @@ import { AppModule } from '@/store/modules/app'
 export default class extends Vue {
   // You can add more Prop, see: https://github.com/dai-siki/vue-image-crop-upload#usage
   @Prop({ required: true }) private value!: boolean
-  @Prop({ required: true }) private url!: string
+  @Prop({ required: true, default: `${FILE_API}/upload` }) private url!: string
   @Prop({ required: true }) private field!: string
   @Prop({ default: 300 }) private width!: number
   @Prop({ default: 300 }) private height!: number
   @Prop({ default: () => null }) private params!: object
-  @Prop({ default: () => null }) private headers!: object
+  @Prop({
+    default: () => ({
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`
+    })
+  })
+  private headers!: object
 
   // https://github.com/dai-siki/vue-image-crop-upload#language-package
   private languageTypeList: { [key: string]: string } = {

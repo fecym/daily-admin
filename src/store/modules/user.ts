@@ -16,7 +16,7 @@ import { Base64 } from 'js-base64'
 export interface IUserState {
   token: string
   name: string
-  avatar: string
+  // avatar: string
   introduction: string
   roles: string[]
   email: string
@@ -27,7 +27,7 @@ export interface IUserState {
 class User extends VuexModule implements IUserState {
   public token = getToken() || '';
   public name = '';
-  public avatar = '';
+  // public avatar = '';
   public introduction = '';
   public roles: string[] = [];
   public email = '';
@@ -54,10 +54,10 @@ class User extends VuexModule implements IUserState {
     this.name = name
   }
 
-  @Mutation
-  public SET_AVATAR(avatar: string) {
-    this.avatar = avatar
-  }
+  // @Mutation
+  // public SET_AVATAR(avatar: string) {
+  //   this.avatar = avatar
+  // }
 
   @Mutation
   private SET_INTRODUCTION(introduction: string) {
@@ -111,14 +111,15 @@ class User extends VuexModule implements IUserState {
     if (!data) {
       throw Error('Verification failed, please Login again.')
     }
-    const { roles, name, avatar, introduction, email } = data
+    // const { roles, name, avatar, introduction, email } = data
+    const { roles, name, introduction, email } = data
     // roles must be a non-empty array
     if (!roles || roles.length <= 0) {
       throw Error('GetUserInfo: roles must be a non-null array!')
     }
     this.SET_ROLES(roles)
     this.SET_NAME(name)
-    this.SET_AVATAR(avatar)
+    // this.SET_AVATAR(avatar)
     this.SET_INTRODUCTION(introduction)
     this.SET_EMAIL(email)
     this.SET_USERINFO(data)
