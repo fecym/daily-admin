@@ -14,3 +14,10 @@ export const downloadFile = (params?: object) =>
     method: 'GET',
     params
   })
+
+export const getFileList = (params?: object) =>
+  request({
+    url: FILE_API + '/get/list',
+    method: 'GET',
+    params
+  })

@@ -72,7 +72,8 @@ export default {
     'consume-statistics': '消费统计',
     'transfer-accounts': '转账管理',
     'transfer-details': '转账详细',
-    'transfer-timeline': '时间轴'
+    'transfer-timeline': '时间轴',
+    'file-list': '文件系统'
   },
   steps: {
     Hamburger: '打开或者关闭侧边栏',

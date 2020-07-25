@@ -72,7 +72,8 @@ export default {
     'consume-statistics': 'Pay Statistics',
     'transfer-accounts': 'Transfer Accounts',
     'transfer-details': 'Transfer Details',
-    'transfer-timeline': 'Transfer Timeline'
+    'transfer-timeline': 'Transfer Timeline',
+    'file-list': 'File System'
   },
   steps: {
     Hamburger: 'Open && Close sidebar',

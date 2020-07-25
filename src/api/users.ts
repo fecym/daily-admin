@@ -71,6 +71,12 @@ export const updateAvatar = (headPic: string) =>
     data: { headPic }
   })
 
+export const getUserSelectNames = () =>
+  request({
+    url: API + '/get/select/names',
+    method: 'GET'
+  })
+
 export const logout = () =>
   request({
     url: '/user/logout',
