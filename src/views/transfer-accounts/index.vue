@@ -192,7 +192,7 @@ export default class TransferAccount extends Vue {
           break
       }
     })
-    console.log('ConsumeList -> getSummaries -> sums', sums)
+    // console.log('ConsumeList -> getSummaries -> sums', sums)
     return sums
   }
 }

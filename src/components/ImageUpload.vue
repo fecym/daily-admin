@@ -13,6 +13,7 @@
       :on-preview="handlePictureCardPreview"
       :on-remove="handleRemove"
       :on-success="handleSuccess"
+      :on-error="handleError"
       :before-upload="beforeUpload"
       :file-list="fileList"
     >
@@ -92,6 +93,11 @@ export default class ImageUpload extends Vue {
         return item.response.data
       }
     })
+  }
+
+  private handleError(err: Error, file: File, fileList: any) {
+    console.log('ImageUpload -> handleError -> err.message', err.message, file, fileList)
+    this.$message.error('上传失败')
   }
 
   private handleSuccess(res: any, file: File, fileList: any) {
