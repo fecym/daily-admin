@@ -1,3 +1,6 @@
+import { MessageBox } from 'element-ui'
+import { ElMessageBoxOptions } from 'element-ui/types/message-box'
+
 // Parse the time to string
 export const parseTime = (
   time?: object | string | number,
@@ -127,4 +130,35 @@ export const parseLabelToDic: IDic | any = (labelData: Array<IType>) => {
  */
 export const formatPrice = (price: number | string) => {
   return parseFloat(price as string).toLocaleString('zh', { style: 'decimal' })
+}
+
+/**
+ * 操作提示框，若不传递任何参数，默认 删除操作
+ * 一般用法只传递 message 即可
+ * @param {*} config 配置对象
+ */
+export const operateDialog = (
+  {
+    title = '操作提示',
+    message = '确定执行删除操作？',
+    type = 'warning',
+    confirmButtonText,
+    cancelButtonText
+  } = {
+    title: '操作提示',
+    message: '确定执行删除操作？',
+    type: 'warning',
+    confirmButtonText: '确定',
+    cancelButtonText: '取消'
+  } as ElMessageBoxOptions
+) => {
+  return new Promise((resolve, reject) => {
+    MessageBox.confirm(message as string, title, {
+      confirmButtonText,
+      cancelButtonText,
+      type
+    })
+      .then(resolve)
+      .catch(reject)
+  })
 }

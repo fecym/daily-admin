@@ -21,3 +21,10 @@ export const getFileList = (params?: object) =>
     method: 'GET',
     params
   })
+
+export const deleteFile = (params?: object) =>
+  request({
+    url: FILE_API + '/delete',
+    method: 'POST',
+    params
+  })

@@ -58,7 +58,7 @@
       :total="total"
       :query-info="queryInfo"
       operate="true"
-      :is-del="false"
+      :is-del="true"
       @current-change="handleCurrentChange"
       @size-change="handleSizeChange"
       @operate-details="gotoDetails"
@@ -85,8 +85,8 @@ import { tableConf } from './utils/constant'
 
 import BaseTable from '@/components/BaseTable.vue'
 import { getUserSelectNames } from '@/api/users'
-import { getFileList } from '@/api/file'
-import { parseLabelToDic } from '@/utils'
+import { getFileList, deleteFile } from '@/api/file'
+import { parseLabelToDic, operateDialog } from '@/utils'
 
 @Component({ components: { BaseTable } })
 export default class TransferAccount extends Vue {
@@ -151,8 +151,18 @@ export default class TransferAccount extends Vue {
     this.dialogTitle = row.name
   }
 
-  private del(row: IFileInfo) {
+  private async del(row: IFileInfo) {
     console.log('TransferAccount -> del -> row', row)
+    try {
+      await operateDialog()
+      await deleteFile({ id: row.id })
+      this.search()
+    } catch (e) {
+      if (e === 'cancel') {
+        this.$message.info('已取消删除')
+      }
+      console.log('TransferAccount -> del -> e', e)
+    }
   }
 }
 </script>
